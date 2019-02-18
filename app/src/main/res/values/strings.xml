@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MySimesApp</string>
+
+    <!-- Facebook Strings -->
+    <string name="facebook_app_id">244159339802348</string>
+    <string name="fb_login_protocol_scheme">fb244159339802348</string>
+
+</resources>
