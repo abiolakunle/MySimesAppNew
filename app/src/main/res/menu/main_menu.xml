@@ -10,5 +10,5 @@
         android:title="All Users" />
     <item
         android:id="@+id/main_logout_btn"
-        android:title="@string/log_out" />
+        android:title="" />
 </menu>
