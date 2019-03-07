@@ -1,10 +1,8 @@
 package com.abiolasoft.mysimesapp.Models;
 
-import org.w3c.dom.Document;
-
 import java.util.List;
 
-public class User {
+public class UserDetails {
 
     private String id;
     private String displayName;
@@ -106,10 +104,8 @@ public class User {
         this.documents = documents;
     }
 
-    public void addToDocuments(String document){
+    public void addToDocuments(String document) {
         documents.add(document);
     }
-
-
 
 }

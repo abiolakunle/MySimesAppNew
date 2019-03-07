@@ -5,20 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 
-
 import com.abiolasoft.mysimesapp.Activities.ProfileActivity;
-import com.abiolasoft.mysimesapp.Models.User;
+import com.abiolasoft.mysimesapp.Models.UserDetails;
 import com.abiolasoft.mysimesapp.R;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -37,39 +30,8 @@ import com.squareup.picasso.Picasso;
 
 public class DrawerUtil {
 
-    private static String name;
-    private static String email;
-    private static String thumb_image;
-    private FirebaseUser user;
-    DocumentReference documentReference;
 
-    public DrawerUtil(FirebaseUser user){
-        this.user = user;
-        GetUserData();
-    }
-
-    private void GetUserData(){
-
-        documentReference = FirebaseFirestore.getInstance().document(user.getUid());
-
-        if(user != null){
-            email = user.getEmail();
-            documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    User user = documentSnapshot.toObject(User.class);
-                    name = user.getDisplayName();
-                    thumb_image = user.getImage_thumb();
-                }
-            });
-
-
-        }
-
-    }
-
-
-    public void getDrawer(final Activity activity, Toolbar toolbar){
+    public void getDrawer(final Activity activity, Toolbar toolbar, UserDetails currentUserDetails) {
 
         DrawerImageLoader.init(new AbstractDrawerImageLoader() {
             @Override
@@ -114,9 +76,10 @@ public class DrawerUtil {
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(activity)
                 .withHeaderBackground(R.drawable.header)
-                .addProfiles(
-                        new ProfileDrawerItem()
-                        .withName(name).withEmail(email).withIcon(thumb_image)
+                .addProfiles(new ProfileDrawerItem()
+                        .withName(currentUserDetails.getDisplayName())
+                        .withEmail(currentUserDetails.getEmail())
+                        .withIcon(currentUserDetails.getImage_thumb())
                 ).withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
@@ -128,9 +91,9 @@ public class DrawerUtil {
 
 
         //if you want to update the items at a later time it is recommended to keep it in a variable
-        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("MySimesMessenger").withIdentifier(1);
+        //PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("MySimesMessenger").withIdentifier(1);
 
-        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withName("MySimesForum").withIdentifier(2);
+        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("MySimesForum").withIdentifier(2);
 
 
         ExpandableDrawerItem item3 = new ExpandableDrawerItem().withName("Timetable").withSubItems(
@@ -156,13 +119,13 @@ public class DrawerUtil {
 
 
         Drawer result = new DrawerBuilder()
-                .withActivity(activity)
                 .withToolbar(toolbar)
+                .withActivity(activity)
                 .withCloseOnClick(true)
                 .withAccountHeader(headerResult)
 
                 .addDrawerItems(
-                        item1, item2, item3, item4, item5, item6
+                        item1, item3, item4, item5, item6
 
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -216,6 +179,10 @@ public class DrawerUtil {
                     }
                 })
                 .build();
+        headerResult.updateProfile(new ProfileDrawerItem()
+                .withIcon(R.drawable.com_facebook_profile_picture_blank_square)
+                .withName(currentUserDetails.getDisplayName())
+                .withEmail(currentUserDetails.getEmail()));
     }
 
 

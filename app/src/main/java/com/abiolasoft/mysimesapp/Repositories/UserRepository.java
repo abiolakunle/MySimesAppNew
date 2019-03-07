@@ -1,12 +1,11 @@
 package com.abiolasoft.mysimesapp.Repositories;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.abiolasoft.mysimesapp.Interfaces.UserRepositoryInterface;
-import com.abiolasoft.mysimesapp.Models.User;
+import com.abiolasoft.mysimesapp.Models.UserDetails;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -17,13 +16,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
-public class UserRepository implements UserRepositoryInterface<User> {
+public class UserRepository implements UserRepositoryInterface<UserDetails> {
 
     private FirebaseFirestore db;
     private Context context;
 
-    private List<User> users;
-    private User user;
+    private List<UserDetails> userList;
+    private UserDetails userDetails;
 
     public UserRepository(){
 
@@ -35,27 +34,27 @@ public class UserRepository implements UserRepositoryInterface<User> {
     }
 
     @Override
-    public List<User> loadAllUsers() {
+    public List<UserDetails> loadAllUsers() {
 
-        db.collection("User").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("UserDetails").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
                     for(DocumentSnapshot documentSnapshot : task.getResult()){
-                        users.add(documentSnapshot.toObject(User.class));
+                        userList.add(documentSnapshot.toObject(UserDetails.class));
                     }
                 } else {
-                    Toast.makeText(context, "Fail to load users", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Fail to load userDetails", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        return users;
+        return userList;
     }
 
     @Override
-    public void addUser(User user) {
-        db.collection("Users").document(user.getId()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+    public void addUser(UserDetails userDetails) {
+        db.collection("Users").document(userDetails.getId()).set(userDetails).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(context, "Data Updated", Toast.LENGTH_SHORT).show();
@@ -69,17 +68,17 @@ public class UserRepository implements UserRepositoryInterface<User> {
     }
 
     @Override
-    public void updateUser(User user) {
-        addUser(user);
+    public void updateUser(UserDetails userDetails) {
+        addUser(userDetails);
     }
 
     @Override
-    public User GetUserById(String user_id) {
+    public UserDetails GetUserById(String user_id) {
 
         db.collection("Users").document(user_id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                user = documentSnapshot.toObject(User.class);
+                userDetails = documentSnapshot.toObject(UserDetails.class);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -87,6 +86,6 @@ public class UserRepository implements UserRepositoryInterface<User> {
                 Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-        return  user;
+        return userDetails;
     }
 }

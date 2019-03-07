@@ -40,6 +40,7 @@ dependencies {
 
     implementation 'com.mikepenz:google-material-typeface:3.0.1.2.original@aar'
     implementation 'com.mikepenz:fontawesome-typeface:5.0.13.0@aar'
+    implementation 'com.google.code.gson:gson:2.8.5'
 
 
 }
