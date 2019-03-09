@@ -1,26 +1,31 @@
 package com.abiolasoft.mysimesapp.Models;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Ebook {
+public class EBook {
 
 
-
-    private String book_id;
-    private String file_name;
+    private String uploader_id;
+    private String book_title;
+    private String description;
     private String file_size;
     private String time_uploaded;
     private String uploaded_by;
     private String file_type;
     private String book_url;
     private String user_id;
-
-
-
     private List<String> book_tags;
 
+    public EBook() {
+        if (book_tags == null) {
+            book_tags = new ArrayList<>();
+        }
+    }
 
-    public Ebook() {
+
+    public void addTag(String tag) {
+        book_tags.add(tag);
     }
 
     public String getBook_url() {
@@ -39,12 +44,12 @@ public class Ebook {
         this.book_tags = book_tags;
     }
 
-    public String getBook_id() {
-        return book_id;
+    public String getUploader_id() {
+        return uploader_id;
     }
 
-    public void setBook_id(String book_id) {
-        this.book_id = book_id;
+    public void setUploader_id(String uploader_id) {
+        this.uploader_id = uploader_id;
     }
 
     public String getUser_id() {
@@ -63,12 +68,12 @@ public class Ebook {
         this.book_url = url;
     }
 
-    public String getFile_name() {
-        return file_name;
+    public String getBook_title() {
+        return book_title;
     }
 
-    public void setFile_name(String file_name) {
-        this.file_name = file_name;
+    public void setBook_title(String book_title) {
+        this.book_title = book_title;
     }
 
     public String getFile_size() {
@@ -101,6 +106,14 @@ public class Ebook {
 
     public void setFile_type(String file_type) {
         this.file_type = file_type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 

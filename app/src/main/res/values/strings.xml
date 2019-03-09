@@ -4,5 +4,9 @@
     <!-- Facebook Strings -->
     <string name="facebook_app_id">244159339802348</string>
     <string name="fb_login_protocol_scheme">fb244159339802348</string>
+    <string name="select_file">Select a file</string>
+    <string name="no_file_selected">No file selected</string>
+    <string name="start_upload">Start Upload</string>
+
 
 </resources>

@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
+
 public class UserSharedPref implements SharePref<UserDetails> {
     private SharedPreferences mPrefs;
 

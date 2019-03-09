@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.abiolasoft.mysimesapp.Activities.ProfileActivity;
+import com.abiolasoft.mysimesapp.Activities.UploadToLibraryActivity;
 import com.abiolasoft.mysimesapp.Models.UserDetails;
 import com.abiolasoft.mysimesapp.R;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -93,7 +94,7 @@ public class DrawerUtil {
         //if you want to update the items at a later time it is recommended to keep it in a variable
         //PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("MySimesMessenger").withIdentifier(1);
 
-        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("MySimesForum").withIdentifier(2);
+        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("MySimesForum").withIdentifier(1);
 
 
         ExpandableDrawerItem item3 = new ExpandableDrawerItem().withName("Timetable").withSubItems(
@@ -132,6 +133,21 @@ public class DrawerUtil {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         // do something with the clicked item :D
+                        Intent drawerItemIntent = null;
+                        long identifier = drawerItem.getIdentifier();
+
+                        if (drawerItem != null) {
+                            if (identifier == 42) {
+                                drawerItemIntent = new Intent(activity, UploadToLibraryActivity.class);
+
+                            }
+                        }
+
+                        if (drawerItemIntent != null) {
+                            activity.startActivity(drawerItemIntent);
+                        }
+
+                        return false;
 
                         /*if (drawerItem != null) {
                             Intent intent = null;
@@ -175,7 +191,7 @@ public class DrawerUtil {
                             }
                         }*/
 
-                        return false;
+
                     }
                 })
                 .build();

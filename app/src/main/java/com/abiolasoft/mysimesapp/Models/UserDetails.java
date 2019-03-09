@@ -1,5 +1,6 @@
 package com.abiolasoft.mysimesapp.Models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDetails {
@@ -15,6 +16,16 @@ public class UserDetails {
     private String email;
     private String level;
     private List<String> documents;
+
+    public UserDetails() {
+        if (documents == null) {
+            documents = new ArrayList<String>();
+        }
+    }
+
+    public int getBookCount() {
+        return documents.size();
+    }
 
     public String getId() {
         return id;

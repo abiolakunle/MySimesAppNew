@@ -7,8 +7,7 @@ import android.widget.Toast;
 
 import com.abiolasoft.mysimesapp.Models.UserDetails;
 import com.abiolasoft.mysimesapp.R;
-import com.abiolasoft.mysimesapp.Repositories.UserRepository;
-import com.abiolasoft.mysimesapp.Utils.UserSharedPref;
+import com.abiolasoft.mysimesapp.Repositories.CurrentUserRepo;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -20,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
 
 public class MainActivity extends BaseActivity {
@@ -92,12 +92,13 @@ public class MainActivity extends BaseActivity {
 
                 if(task.isSuccessful()){
 
-                    user = auth.getCurrentUser();
+                    FirebaseUser currUser = task.getResult().getUser();
+
                     Toast.makeText(MainActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
 
                     //must be called under sign in with credentials
                     UserDetails userDetailsModel = new UserDetails();
-                    for (UserInfo userInfo : user.getProviderData()) {
+                    for (UserInfo userInfo : currUser.getProviderData()) {
                         //userDetailsModel.setId(userInfo.getUid());
                         userDetailsModel.setDisplayName(userInfo.getDisplayName());
                         userDetailsModel.setEmail(userInfo.getEmail());
@@ -105,13 +106,8 @@ public class MainActivity extends BaseActivity {
                         userDetailsModel.setImage_url(userInfo.getPhotoUrl() + "?height=500"); //?type=large
                         userDetailsModel.setPhone(userInfo.getPhoneNumber());
                     }
-                    userDetailsModel.setId(user.getUid());
-
-                    UserRepository userRepository = new UserRepository(MainActivity.this);
-                    userRepository.addUser(userDetailsModel);
-
-                    UserSharedPref mPref = new UserSharedPref();
-                    mPref.setObj(USER_PREF_KEY, userDetailsModel);
+                    userDetailsModel.setId(currUser.getUid());
+                    CurrentUserRepo.updateCurrentUser(userDetailsModel);
 
                     updateUI();
                 }

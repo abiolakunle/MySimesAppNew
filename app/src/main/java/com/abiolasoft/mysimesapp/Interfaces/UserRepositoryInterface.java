@@ -7,6 +7,7 @@ public interface UserRepositoryInterface<User> {
     List<User> loadAllUsers();
     void addUser(User user);
     void updateUser(User user);
-    User GetUserById(String user_id);
+
+    User getUserById(String user_id);
 
 }

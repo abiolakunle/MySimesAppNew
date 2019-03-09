@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 
 import com.abiolasoft.mysimesapp.Models.UserDetails;
 import com.abiolasoft.mysimesapp.R;
+import com.abiolasoft.mysimesapp.Repositories.CurrentUserRepo;
 import com.abiolasoft.mysimesapp.Utils.DrawerUtil;
 import com.abiolasoft.mysimesapp.Utils.UserSharedPref;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,7 +26,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected FirebaseAuth auth;
     protected FirebaseUser user;
     protected Toolbar toolbar;
-    protected final String USER_PREF_KEY = "currentUser";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -82,7 +83,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             setTitle(this.getClass().getSimpleName());
             UserSharedPref mPref = new UserSharedPref();
-            UserDetails currentUserDetails = mPref.getObj(USER_PREF_KEY);
+            UserDetails currentUserDetails = CurrentUserRepo.getOffline();
             DrawerUtil drawer = new DrawerUtil();
             drawer.getDrawer(BaseActivity.this, toolbar, currentUserDetails);
         }
