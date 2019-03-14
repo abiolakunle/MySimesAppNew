@@ -32,7 +32,12 @@
         <activity android:name=".Activities.HomeActivity" />
         <activity android:name=".Activities.ProfileActivity" />
         <activity android:name=".Activities.UploadToLibraryActivity" />
-        <activity android:name=".Activities.ELibraryActivity"></activity>
+        <activity android:name=".Activities.ELibraryActivity" />
+        <activity android:name=".Activities.EBookViewerActivity" />
+        <activity android:name=".Activities.UpdateTimeTableActivity" />
+        <activity android:name=".Activities.UpdatePeriodActivity" />
+        <activity android:name=".Activities.TimeTableActivity" />
+        <activity android:name=".Activities.AccountSettingsActivity"></activity>
     </application>
 
 </manifest>

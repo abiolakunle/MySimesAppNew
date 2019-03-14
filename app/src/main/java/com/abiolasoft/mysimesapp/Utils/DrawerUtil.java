@@ -9,7 +9,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.abiolasoft.mysimesapp.Activities.ProfileActivity;
+import com.abiolasoft.mysimesapp.Activities.AccountSettingsActivity;
+import com.abiolasoft.mysimesapp.Activities.ELibraryActivity;
+import com.abiolasoft.mysimesapp.Activities.TimeTableActivity;
+import com.abiolasoft.mysimesapp.Activities.UpdatePeriodActivity;
 import com.abiolasoft.mysimesapp.Activities.UploadToLibraryActivity;
 import com.abiolasoft.mysimesapp.Models.UserDetails;
 import com.abiolasoft.mysimesapp.R;
@@ -84,8 +87,8 @@ public class DrawerUtil {
                 ).withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
-                        Intent profileIntent = new Intent(activity, ProfileActivity.class);
-                        activity.startActivity(profileIntent);
+                        Intent accountIntent = new Intent(activity, AccountSettingsActivity.class);
+                        activity.startActivity(accountIntent);
                         return true;
                     }
                 }).build();
@@ -104,7 +107,7 @@ public class DrawerUtil {
         );
 
         ExpandableDrawerItem item4 = new ExpandableDrawerItem().withName("MySimes E-Library").withSubItems(
-                new SecondaryDrawerItem().withName("E-Library").withIdentifier(41),
+                new SecondaryDrawerItem().withName("ELibrary").withIdentifier(41),
                 new SecondaryDrawerItem().withName("Upload a File").withIdentifier(42),
                 new SecondaryDrawerItem().withName("Upload Multiple Files").withIdentifier(43)
 
@@ -139,7 +142,12 @@ public class DrawerUtil {
                         if (drawerItem != null) {
                             if (identifier == 42) {
                                 drawerItemIntent = new Intent(activity, UploadToLibraryActivity.class);
-
+                            } else if (identifier == 41) {
+                                drawerItemIntent = new Intent(activity, ELibraryActivity.class);
+                            } else if (identifier == 33) {
+                                drawerItemIntent = new Intent(activity, UpdatePeriodActivity.class);
+                            } else if (identifier == 31) {
+                                drawerItemIntent = new Intent(activity, TimeTableActivity.class);
                             }
                         }
 

@@ -118,7 +118,7 @@ public class MainActivity extends BaseActivity {
 
 
     private void updateUI(){
-        Intent homeIntent = new Intent(this, HomeActivity.class);
+        Intent homeIntent = new Intent(MainActivity.this, HomeActivity.class);
         startActivity(homeIntent);
     }
 
