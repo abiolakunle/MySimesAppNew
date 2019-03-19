@@ -16,13 +16,13 @@ public class CurrentUserRepo {
     }
 
     public static UserDetails getOnline() {
-        String Uid = userSharedPref.getObj(USER_PREF_KEY).getId();
+        String Uid = ((UserDetails) userSharedPref.getObj(USER_PREF_KEY)).getId();
         UserDetails user = userRepository.getUserById(Uid);
         return user;
     }
 
     public static UserDetails getOffline() {
-        UserDetails user = userSharedPref.getObj(USER_PREF_KEY);
+        UserDetails user = (UserDetails) userSharedPref.getObj(USER_PREF_KEY);
         return user;
     }
 }

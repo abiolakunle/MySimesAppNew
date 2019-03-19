@@ -102,8 +102,8 @@ public class MainActivity extends BaseActivity {
                         //userDetailsModel.setId(userInfo.getUid());
                         userDetailsModel.setDisplayName(userInfo.getDisplayName());
                         userDetailsModel.setEmail(userInfo.getEmail());
-                        userDetailsModel.setImage_thumb(userInfo.getPhotoUrl().toString());
-                        userDetailsModel.setImage_url(userInfo.getPhotoUrl() + "?height=500"); //?type=large
+                        userDetailsModel.setImage_thumb(userInfo.getPhotoUrl().toString() + "?height=500");
+                        userDetailsModel.setImage_url(userInfo.getPhotoUrl().toString()); //?type=large
                         userDetailsModel.setPhone(userInfo.getPhoneNumber());
                     }
                     userDetailsModel.setId(currUser.getUid());

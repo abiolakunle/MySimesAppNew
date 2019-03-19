@@ -16,4 +16,5 @@ public class HomeActivity extends BaseActivity {
         SeedDatabase.populateCourses(this);
 
     }
+
 }

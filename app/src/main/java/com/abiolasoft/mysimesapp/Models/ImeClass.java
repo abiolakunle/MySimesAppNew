@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ImeClass {
-    private int classCode;
+    private String classCode;
     private List<TimeTablePeriod> timeTable;
 
     public ImeClass() {
@@ -21,11 +21,11 @@ public class ImeClass {
         timeTable.remove(period);
     }
 
-    public int getClassCode() {
+    public String getClassCode() {
         return classCode;
     }
 
-    public void setClassCode(int classCode) {
+    public void setClassCode(String classCode) {
         this.classCode = classCode;
     }
 

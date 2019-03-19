@@ -15,7 +15,9 @@ import com.abiolasoft.mysimesapp.Models.Course;
 import com.abiolasoft.mysimesapp.Models.ImeClass;
 import com.abiolasoft.mysimesapp.Models.TimeTablePeriod;
 import com.abiolasoft.mysimesapp.R;
+import com.abiolasoft.mysimesapp.Repositories.CurrentUserRepo;
 import com.abiolasoft.mysimesapp.Utils.DbPaths;
+import com.abiolasoft.mysimesapp.Utils.ImeClassSharedPref;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -37,6 +39,9 @@ public class UpdatePeriodActivity extends BaseActivity {
     private boolean dataValid = true;
     private ImeClass imeClass;
     private TimeTablePeriod timeTablePeriod;
+    private Bundle intentExtras;
+    private ImeClass classToEdit;
+    private int positionToEdit;
 
 
     @Override
@@ -58,13 +63,15 @@ public class UpdatePeriodActivity extends BaseActivity {
         startAmPm = findViewById(R.id.start_am_pm);
         endAmPm = findViewById(R.id.end_am_pm);
 
+        imeClass = new ImeClass();
+
+        intentExtras = getIntent().getExtras();
 
         populateSpinners();
 
         updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 getDataFromViews();
                 if (dataValid) {
                     submitToDb();
@@ -80,22 +87,29 @@ public class UpdatePeriodActivity extends BaseActivity {
 
     private void submitToDb() {
 
-        firebaseFirestore.collection(DbPaths.Classes.toString()).document("11").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        firebaseFirestore.collection(DbPaths.Classes.toString()).document(CurrentUserRepo.getOffline().getLevel()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
-                    ImeClass result = imeClass;
+                    imeClass.addToTimetable(timeTablePeriod);
                     if (task.getResult().exists()) {
-                        result = task.getResult().toObject(ImeClass.class);
+                        if (intentExtras == null) {
+                            imeClass = task.getResult().toObject(ImeClass.class);
+                            imeClass.addToTimetable(timeTablePeriod);
+                        } else {
+                            classToEdit.getTimeTable().set(positionToEdit, timeTablePeriod);
+                            imeClass = classToEdit;
+                        }
+
                     }
 
-                    result.addToTimetable(timeTablePeriod);
-                    firebaseFirestore.collection(DbPaths.Classes.toString()).document("11").set(result).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    firebaseFirestore.collection(DbPaths.Classes.toString()).document(CurrentUserRepo.getOffline().getLevel()).set(imeClass).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(UpdatePeriodActivity.this, "Class timetable Updated", Toast.LENGTH_SHORT).show();
                                 Intent timetableIntent = new Intent(UpdatePeriodActivity.this, TimeTableActivity.class);
+                                timetableIntent.putExtra("DAY", timeTablePeriod.getDayOfWeek());
                                 startActivity(timetableIntent);
                             }
                         }
@@ -108,10 +122,6 @@ public class UpdatePeriodActivity extends BaseActivity {
     }
 
     private void getDataFromViews() {
-        imeClass = new ImeClass();
-
-        // String classCode = getIntent().getStringExtra("classCode");
-        imeClass.setClassCode(11);
 
         timeTablePeriod = new TimeTablePeriod();
         int selectedCoursePosition = courseSpinner.getSelectedItemPosition();
@@ -143,12 +153,7 @@ public class UpdatePeriodActivity extends BaseActivity {
         timeTablePeriod.setEndMin(Integer.valueOf(endTimeMinSpin.getSelectedItem().toString()));
         timeTablePeriod.setLecturer(lecturerTxt.getText().toString());
         timeTablePeriod.setPractical(isPracticalCheck.isChecked());
-
-        imeClass.addToTimetable(timeTablePeriod);
-
-
     }
-
 
     private void populateSpinners() {
         final List<String> listOfCourse = new ArrayList<String>();
@@ -183,6 +188,7 @@ public class UpdatePeriodActivity extends BaseActivity {
         courseSpinner.setAdapter(courseSpinnerAdapt);
 
 
+
         firebaseFirestore.collection(DbPaths.Courses.toString()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -192,6 +198,38 @@ public class UpdatePeriodActivity extends BaseActivity {
                         courseObjects = task.getResult().toObjects(Course.class);
                     }
                     courseSpinnerAdapt.notifyDataSetChanged();
+
+                    if (intentExtras != null) {
+                        classToEdit = new ImeClassSharedPref().getObj("IME_CLASS");
+                        positionToEdit = intentExtras.getInt("COURSE_POSITION");
+
+                        int spinPosition = courseSpinnerAdapt.getPosition(classToEdit.getTimeTable().get(positionToEdit).getCourse().getCourseName());
+                        courseSpinner.setSelection(spinPosition);
+
+                        int startTimeHourPos = timeHourAdapt.getPosition(classToEdit.getTimeTable().get(positionToEdit).getStartHour());
+                        startTimeHourSpin.setSelection(startTimeHourPos);
+
+                        int startTimeMinPos = timeMinAdapt.getPosition(classToEdit.getTimeTable().get(positionToEdit).getStartMin());
+                        startTimeMinSpin.setSelection(startTimeMinPos);
+
+                        int endTimeHourPos = timeHourAdapt.getPosition(classToEdit.getTimeTable().get(positionToEdit).getEndHour());
+                        endTimeHourSpin.setSelection(endTimeHourPos);
+
+                        int endTimeMinPos = timeMinAdapt.getPosition(classToEdit.getTimeTable().get(positionToEdit).getEndMin());
+                        endTimeMinSpin.setSelection(endTimeMinPos);
+
+                        lecturerTxt.setText(classToEdit.getTimeTable().get(positionToEdit).getLecturer());
+
+                        ArrayAdapter dayWeekAdapt = (ArrayAdapter) dayOfWeekSpin.getAdapter();
+                        int dayOfWeekPos = dayWeekAdapt.getPosition(classToEdit.getTimeTable().get(positionToEdit).getDayOfWeek());
+                        dayOfWeekSpin.setSelection(dayOfWeekPos);
+
+                        isPracticalCheck.setChecked(classToEdit.getTimeTable().get(positionToEdit).isPractical());
+
+                    } else {
+                        imeClass = new ImeClass();
+                        imeClass.setClassCode(CurrentUserRepo.getOffline().getLevel());
+                    }
                 }
             }
         });

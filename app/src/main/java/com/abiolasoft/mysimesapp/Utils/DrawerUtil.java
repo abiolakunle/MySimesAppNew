@@ -11,7 +11,7 @@ import android.widget.ImageView;
 
 import com.abiolasoft.mysimesapp.Activities.AccountSettingsActivity;
 import com.abiolasoft.mysimesapp.Activities.ELibraryActivity;
-import com.abiolasoft.mysimesapp.Activities.TimeTableActivity;
+import com.abiolasoft.mysimesapp.Activities.TimetableDayActivity;
 import com.abiolasoft.mysimesapp.Activities.UpdatePeriodActivity;
 import com.abiolasoft.mysimesapp.Activities.UploadToLibraryActivity;
 import com.abiolasoft.mysimesapp.Models.UserDetails;
@@ -147,7 +147,7 @@ public class DrawerUtil {
                             } else if (identifier == 33) {
                                 drawerItemIntent = new Intent(activity, UpdatePeriodActivity.class);
                             } else if (identifier == 31) {
-                                drawerItemIntent = new Intent(activity, TimeTableActivity.class);
+                                drawerItemIntent = new Intent(activity, TimetableDayActivity.class);
                             }
                         }
 
@@ -203,10 +203,10 @@ public class DrawerUtil {
                     }
                 })
                 .build();
-        headerResult.updateProfile(new ProfileDrawerItem()
+        /*headerResult.updateProfile(new ProfileDrawerItem()
                 .withIcon(R.drawable.com_facebook_profile_picture_blank_square)
                 .withName(currentUserDetails.getDisplayName())
-                .withEmail(currentUserDetails.getEmail()));
+                .withEmail(currentUserDetails.getEmail()));*/
     }
 
 

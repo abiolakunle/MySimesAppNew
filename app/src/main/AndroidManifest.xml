@@ -37,7 +37,8 @@
         <activity android:name=".Activities.UpdateTimeTableActivity" />
         <activity android:name=".Activities.UpdatePeriodActivity" />
         <activity android:name=".Activities.TimeTableActivity" />
-        <activity android:name=".Activities.AccountSettingsActivity"></activity>
+        <activity android:name=".Activities.AccountSettingsActivity" />
+        <activity android:name=".Activities.TimetableDayActivity"></activity>
     </application>
 
 </manifest>

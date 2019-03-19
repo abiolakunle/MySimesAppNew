@@ -9,6 +9,7 @@ import com.abiolasoft.mysimesapp.Adapters.TimetableAdapter;
 import com.abiolasoft.mysimesapp.Models.ImeClass;
 import com.abiolasoft.mysimesapp.Models.TimeTablePeriod;
 import com.abiolasoft.mysimesapp.R;
+import com.abiolasoft.mysimesapp.Repositories.CurrentUserRepo;
 import com.abiolasoft.mysimesapp.Utils.DbPaths;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -38,8 +39,7 @@ public class TimeTableActivity extends BaseActivity {
         recyclerView = findViewById(R.id.timetable_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
-        timetableAdapter = new TimetableAdapter(this, imeClass, timeTableList);
+        timetableAdapter = new TimetableAdapter(imeClass, timeTableList);
         recyclerView.setAdapter(timetableAdapter);
 
         getTimetableFromDb();
@@ -52,18 +52,24 @@ public class TimeTableActivity extends BaseActivity {
 
     private void getTimetableFromDb() {
 
-        firebaseFirestore.collection(DbPaths.Classes.toString()).document("11").addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        firebaseFirestore.collection(DbPaths.Classes.toString()).document(CurrentUserRepo.getOffline().getLevel()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                imeClass.add(documentSnapshot.toObject(ImeClass.class));
-                List<TimeTablePeriod> result = documentSnapshot.toObject(ImeClass.class).getTimeTable();
+                if (documentSnapshot.exists()) {
+                    imeClass.add(documentSnapshot.toObject(ImeClass.class));
+                    List<TimeTablePeriod> result = documentSnapshot.toObject(ImeClass.class).getTimeTable();
+                    String dayExtra = getIntent().getStringExtra("DAY");
 
-                timeTableList.clear();
-                for (int i = 0; i < result.size(); i++) {
-                    timeTableList.add(result.get(i));
-                    timetableAdapter.notifyDataSetChanged();
+                    timeTableList.clear();
+                    for (int i = 0; i < result.size(); i++) {
+                        if (result.get(i).getDayOfWeek().equals(dayExtra)) {
+                            timeTableList.add(result.get(i));
+                            timetableAdapter.notifyDataSetChanged();
+                        }
+                    }
+                    Toast.makeText(TimeTableActivity.this, "Table Loaded", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(TimeTableActivity.this, "Table Loaded", Toast.LENGTH_SHORT).show();
+
             }
         });
     }

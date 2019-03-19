@@ -16,7 +16,8 @@
     <string name="end_time">End Time</string>
     <string name="day_of_week">Day of the week</string>
     <string name="lecture_name">Lecturer</string>
-    <string name="practical">Is practical?</string>
+    <string name="is_practical">Is practical?</string>
+    <string name="practical">Practical</string>
     <string name="update">Update</string>
     <string name="timetable_course">Course</string>
     <string name="course_unit">units</string>
@@ -24,6 +25,7 @@
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="Class">My Class</string>
+    <string name="day">Day</string>
 
 
     <string-array name="colors" translatable="false">
