@@ -11,6 +11,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.abiolasoft.mysimesapp.Adapters.TimetableAdapter;
+import com.abiolasoft.mysimesapp.Adapters.TimetableDayAdapter;
 import com.abiolasoft.mysimesapp.Models.Course;
 import com.abiolasoft.mysimesapp.Models.ImeClass;
 import com.abiolasoft.mysimesapp.Models.TimeTablePeriod;
@@ -42,6 +44,7 @@ public class UpdatePeriodActivity extends BaseActivity {
     private Bundle intentExtras;
     private ImeClass classToEdit;
     private int positionToEdit;
+    private int editOrInsert;
 
 
     @Override
@@ -62,6 +65,7 @@ public class UpdatePeriodActivity extends BaseActivity {
         isPracticalCheck = findViewById(R.id.is_practical_check);
         startAmPm = findViewById(R.id.start_am_pm);
         endAmPm = findViewById(R.id.end_am_pm);
+
 
         imeClass = new ImeClass();
 
@@ -97,7 +101,13 @@ public class UpdatePeriodActivity extends BaseActivity {
                             imeClass = task.getResult().toObject(ImeClass.class);
                             imeClass.addToTimetable(timeTablePeriod);
                         } else {
-                            classToEdit.getTimeTable().set(positionToEdit, timeTablePeriod);
+                            if (editOrInsert == 0) {
+                                classToEdit.getTimeTable().set(positionToEdit, timeTablePeriod);
+                            } else {
+                                classToEdit.getTimeTable().add(positionToEdit, timeTablePeriod);
+                            }
+
+
                             imeClass = classToEdit;
                         }
 
@@ -109,7 +119,7 @@ public class UpdatePeriodActivity extends BaseActivity {
                             if (task.isSuccessful()) {
                                 Toast.makeText(UpdatePeriodActivity.this, "Class timetable Updated", Toast.LENGTH_SHORT).show();
                                 Intent timetableIntent = new Intent(UpdatePeriodActivity.this, TimeTableActivity.class);
-                                timetableIntent.putExtra("DAY", timeTablePeriod.getDayOfWeek());
+                                timetableIntent.putExtra(TimetableDayAdapter.DAY_KEY, timeTablePeriod.getDayOfWeek());
                                 startActivity(timetableIntent);
                             }
                         }
@@ -143,7 +153,6 @@ public class UpdatePeriodActivity extends BaseActivity {
         } else {
             dataValid = true;
         }
-
 
         timeTablePeriod.setCourse(selectedCourse);
         timeTablePeriod.setDayOfWeek(dayOfWeekSpin.getSelectedItem().toString());
@@ -200,31 +209,36 @@ public class UpdatePeriodActivity extends BaseActivity {
                     courseSpinnerAdapt.notifyDataSetChanged();
 
                     if (intentExtras != null) {
-                        classToEdit = new ImeClassSharedPref().getObj("IME_CLASS");
-                        positionToEdit = intentExtras.getInt("COURSE_POSITION");
+                        classToEdit = new ImeClassSharedPref().getObj(TimetableAdapter.CLASS_CODE);
+                        positionToEdit = intentExtras.getInt(TimetableAdapter.POSITION_KEY);
+                        editOrInsert = intentExtras.getInt(TimetableAdapter.UPDATE_KEY);
 
-                        int spinPosition = courseSpinnerAdapt.getPosition(classToEdit.getTimeTable().get(positionToEdit).getCourse().getCourseName());
-                        courseSpinner.setSelection(spinPosition);
+                        if (editOrInsert == 0) {
 
-                        int startTimeHourPos = timeHourAdapt.getPosition(classToEdit.getTimeTable().get(positionToEdit).getStartHour());
-                        startTimeHourSpin.setSelection(startTimeHourPos);
+                            int spinPosition = courseSpinnerAdapt.getPosition(classToEdit.getTimeTable().get(positionToEdit).getCourse().getCourseName());
+                            courseSpinner.setSelection(spinPosition);
 
-                        int startTimeMinPos = timeMinAdapt.getPosition(classToEdit.getTimeTable().get(positionToEdit).getStartMin());
-                        startTimeMinSpin.setSelection(startTimeMinPos);
+                            int startTimeHourPos = timeHourAdapt.getPosition(classToEdit.getTimeTable().get(positionToEdit).getStartHour());
+                            startTimeHourSpin.setSelection(startTimeHourPos);
 
-                        int endTimeHourPos = timeHourAdapt.getPosition(classToEdit.getTimeTable().get(positionToEdit).getEndHour());
-                        endTimeHourSpin.setSelection(endTimeHourPos);
+                            int startTimeMinPos = timeMinAdapt.getPosition(classToEdit.getTimeTable().get(positionToEdit).getStartMin());
+                            startTimeMinSpin.setSelection(startTimeMinPos);
 
-                        int endTimeMinPos = timeMinAdapt.getPosition(classToEdit.getTimeTable().get(positionToEdit).getEndMin());
-                        endTimeMinSpin.setSelection(endTimeMinPos);
+                            int endTimeHourPos = timeHourAdapt.getPosition(classToEdit.getTimeTable().get(positionToEdit).getEndHour());
+                            endTimeHourSpin.setSelection(endTimeHourPos);
 
-                        lecturerTxt.setText(classToEdit.getTimeTable().get(positionToEdit).getLecturer());
+                            int endTimeMinPos = timeMinAdapt.getPosition(classToEdit.getTimeTable().get(positionToEdit).getEndMin());
+                            endTimeMinSpin.setSelection(endTimeMinPos);
 
-                        ArrayAdapter dayWeekAdapt = (ArrayAdapter) dayOfWeekSpin.getAdapter();
-                        int dayOfWeekPos = dayWeekAdapt.getPosition(classToEdit.getTimeTable().get(positionToEdit).getDayOfWeek());
-                        dayOfWeekSpin.setSelection(dayOfWeekPos);
+                            lecturerTxt.setText(classToEdit.getTimeTable().get(positionToEdit).getLecturer());
 
-                        isPracticalCheck.setChecked(classToEdit.getTimeTable().get(positionToEdit).isPractical());
+                            ArrayAdapter dayWeekAdapt = (ArrayAdapter) dayOfWeekSpin.getAdapter();
+                            int dayOfWeekPos = dayWeekAdapt.getPosition(classToEdit.getTimeTable().get(positionToEdit).getDayOfWeek());
+                            dayOfWeekSpin.setSelection(dayOfWeekPos);
+
+                            isPracticalCheck.setChecked(classToEdit.getTimeTable().get(positionToEdit).isPractical());
+
+                        }
 
                     } else {
                         imeClass = new ImeClass();

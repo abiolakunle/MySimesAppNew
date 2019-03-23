@@ -1,11 +1,13 @@
 package com.abiolasoft.mysimesapp.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.abiolasoft.mysimesapp.Adapters.TimetableAdapter;
+import com.abiolasoft.mysimesapp.Adapters.TimetableDayAdapter;
 import com.abiolasoft.mysimesapp.Models.ImeClass;
 import com.abiolasoft.mysimesapp.Models.TimeTablePeriod;
 import com.abiolasoft.mysimesapp.R;
@@ -58,9 +60,14 @@ public class TimeTableActivity extends BaseActivity {
                 if (documentSnapshot.exists()) {
                     imeClass.add(documentSnapshot.toObject(ImeClass.class));
                     List<TimeTablePeriod> result = documentSnapshot.toObject(ImeClass.class).getTimeTable();
-                    String dayExtra = getIntent().getStringExtra("DAY");
+                    String dayExtra = getIntent().getExtras().getString(TimetableDayAdapter.DAY_KEY);
 
                     timeTableList.clear();
+
+                    if (result.isEmpty()) {
+                        Intent addIntent = new Intent(TimeTableActivity.this, UpdatePeriodActivity.class);
+                        startActivity(addIntent);
+                    }
                     for (int i = 0; i < result.size(); i++) {
                         if (result.get(i).getDayOfWeek().equals(dayExtra)) {
                             timeTableList.add(result.get(i));

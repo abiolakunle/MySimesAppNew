@@ -30,6 +30,10 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
     private Context context;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private List<ImeClass> imeClass;
+    public static final String UPDATE_KEY = "edit";
+    public static final String POSITION_KEY = "position";
+    public static final String CLASS_CODE = "ImeClass";
+
 
 
     public TimetableAdapter(List<ImeClass> imeClass, List<TimeTablePeriod> list) {
@@ -37,17 +41,21 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
         this.imeClass = imeClass;
     }
 
+
     @NonNull
     @Override
     public TimetableAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.timetable_single_item, parent, false);
+
+        View view = LayoutInflater.from(context).inflate(R.layout.timetable_single_item, parent, false);
 
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final TimetableAdapter.ViewHolder holder, final int position) {
+
+
         String startAmPm = timeTableList.get(position).getStartHour() > 12 ? "PM" : "AM";
         String endAmPm = timeTableList.get(position).getEndHour() > 12 ? "PM" : "AM";
 
@@ -67,11 +75,10 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
         holder.editTimetableBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImeClassSharedPref imeClassSharedPref = new ImeClassSharedPref();
-                imeClassSharedPref.setObj("IME_CLASS", imeClass.get(0));
-                Intent editIntent = new Intent(context, UpdatePeriodActivity.class);
-                editIntent.putExtra("COURSE_POSITION", position);
-                context.startActivity(editIntent);
+                Intent updateIntent = updateIntent();
+                updateIntent.putExtra(UPDATE_KEY, 0);
+                updateIntent.putExtra(POSITION_KEY, position);
+                context.startActivity(updateIntent);
             }
         });
 
@@ -93,6 +100,18 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
             }
         });
 
+        holder.timetableInsert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent insertIntent = updateIntent().putExtra(POSITION_KEY, position + 1);
+                insertIntent.putExtra(UPDATE_KEY, 1);
+                context.startActivity(insertIntent);
+            }
+        });
+
+        if (position != timeTableList.size() - 1) {
+            holder.timetableInsert.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -105,10 +124,17 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
         this.notifyDataSetChanged();
     }
 
+    private Intent updateIntent() {
+        ImeClassSharedPref imeClassSharedPref = new ImeClassSharedPref();
+        imeClassSharedPref.setObj(CLASS_CODE, imeClass.get(0));
+        Intent editIntent = new Intent(context, UpdatePeriodActivity.class);
+        return editIntent;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         LetterImageView letterImageView;
-        TextView timetableCourse, timetableCode, timetableUnit, timetableStart, timetableEnd, timetableLecturer, isPracticalText;
+        TextView timetableCourse, timetableCode, timetableUnit, timetableStart, timetableEnd, timetableLecturer, isPracticalText, timetableInsert;
         Button editTimetableBtn, timetableDelete;
 
         public ViewHolder(View itemView) {
@@ -124,6 +150,7 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
             editTimetableBtn = itemView.findViewById(R.id.edit_timetable_btn);
             timetableDelete = itemView.findViewById(R.id.timetable_delete_btn);
             isPracticalText = itemView.findViewById(R.id.is_practical_text);
+            timetableInsert = itemView.findViewById(R.id.timetable_insert);
 
         }
     }

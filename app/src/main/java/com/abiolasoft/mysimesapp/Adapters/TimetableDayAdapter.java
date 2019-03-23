@@ -19,6 +19,7 @@ public class TimetableDayAdapter extends RecyclerView.Adapter<TimetableDayAdapte
 
     private String[] days;
     private Context context;
+    public static final String DAY_KEY = "day";
 
     public TimetableDayAdapter(String[] days) {
         this.days = days;
@@ -43,7 +44,7 @@ public class TimetableDayAdapter extends RecyclerView.Adapter<TimetableDayAdapte
             @Override
             public void onClick(View v) {
                 Intent periodIntent = new Intent(context, TimeTableActivity.class);
-                periodIntent.putExtra("DAY", days[position]);
+                periodIntent.putExtra(DAY_KEY, days[position]);
                 context.startActivity(periodIntent);
             }
         });
@@ -66,7 +67,6 @@ public class TimetableDayAdapter extends RecyclerView.Adapter<TimetableDayAdapte
             dayText = itemView.findViewById(R.id.day_text_view);
             dayLetter = itemView.findViewById(R.id.day_letter_imageView);
             dayCard = itemView.findViewById(R.id.days_card_view);
-
         }
     }
 }

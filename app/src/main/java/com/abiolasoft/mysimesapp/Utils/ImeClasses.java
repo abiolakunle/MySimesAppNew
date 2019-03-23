@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum ImeClasses {
+
     ND1_FT("ND1 FULLTIME"),
     ND2_FT("ND2 FULLTIME"),
     HND1_FT("HND1 FULLTIME"),
@@ -13,7 +14,8 @@ public enum ImeClasses {
     ND3_PT("ND3 PARTTIME"),
     HND1_PT("HND1 PARTTIME"),
     HND2_PT("HND2 PARTTIME"),
-    HND3_PT("HND3 PARTTIME");
+    HND3_PT("HND3 PARTTIME"),
+    GRAD("GRADUATED");
 
     private static final Map<String, ImeClasses> lookup = new HashMap<String, ImeClasses>();
 

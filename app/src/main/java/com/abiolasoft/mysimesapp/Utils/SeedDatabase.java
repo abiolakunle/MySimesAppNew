@@ -2,7 +2,6 @@ package com.abiolasoft.mysimesapp.Utils;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
 import com.abiolasoft.mysimesapp.Models.Course;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -62,7 +61,7 @@ public class SeedDatabase {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
-                        Toast.makeText(context, coursesNames.get(finalI) + " added", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, coursesNames.get(finalI) + " added", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
