@@ -4,33 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.SignInActivity">
+    tools:context=".Activities.UploadMultipleToLibraryActivity">
 
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/fb_login_button"
+    <Button
+        android:id="@+id/upload_multi_select_file_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/select_files"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/sign_in_button"
+    <Button
+        android:id="@+id/lib_multi_start_upload_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:text="@string/start_upload"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fb_login_button" />
+        app:layout_constraintTop_toBottomOf="@+id/lib_upload_multi_recycler" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/lib_upload_multi_recycler"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/lib_multi_start_upload_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/upload_multi_select_file_btn" />
 
 </android.support.constraint.ConstraintLayout>

@@ -26,7 +26,7 @@ public class MultiViewHider {
 
     public void hideViews() {
         for (View v : views) {
-            v.setVisibility(View.INVISIBLE);
+            v.setVisibility(View.GONE);
         }
         currentState = true;
     }

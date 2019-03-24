@@ -25,6 +25,7 @@ public class TimeTableActivity extends BaseActivity {
 
     private FirebaseFirestore firebaseFirestore;
     private RecyclerView recyclerView;
+
     private List<TimeTablePeriod> timeTableList;
     private TimetableAdapter timetableAdapter;
     private List<ImeClass> imeClass;
@@ -33,6 +34,7 @@ public class TimeTableActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_table);
+
 
         timeTableList = new ArrayList<TimeTablePeriod>();
         imeClass = new ArrayList<ImeClass>();
@@ -73,6 +75,7 @@ public class TimeTableActivity extends BaseActivity {
                             timeTableList.add(result.get(i));
                             timetableAdapter.notifyDataSetChanged();
                         }
+
                     }
                     Toast.makeText(TimeTableActivity.this, "Table Loaded", Toast.LENGTH_SHORT).show();
                 }

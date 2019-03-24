@@ -1,5 +1,6 @@
 package com.abiolasoft.mysimesapp.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -17,6 +18,7 @@ import com.abiolasoft.mysimesapp.R;
 import com.abiolasoft.mysimesapp.Repositories.CurrentUserRepo;
 import com.abiolasoft.mysimesapp.Repositories.UserRepository;
 import com.abiolasoft.mysimesapp.Utils.ImeClasses;
+import com.abiolasoft.mysimesapp.Utils.ImeExecutives;
 import com.abiolasoft.mysimesapp.Utils.MultiViewHider;
 
 public class AccountSettingsActivity extends BaseActivity {
@@ -28,6 +30,7 @@ public class AccountSettingsActivity extends BaseActivity {
     private Button updateSetting;
 
     private String selectedClass;
+    private int referer;
     private UserDetails userDetails;
 
     @Override
@@ -65,12 +68,20 @@ public class AccountSettingsActivity extends BaseActivity {
         ArrayAdapter<ImeClasses> setClassAdapt = new ArrayAdapter<ImeClasses>(this,
                 android.R.layout.simple_list_item_1,
                 ImeClasses.values());
-
         settingClassSpin.setAdapter(setClassAdapt);
-        settingClassSpin.setSelection(setClassAdapt.getPosition(ImeClasses.valueOf(userDetails.getLevel())));
+
+        ArrayAdapter<ImeExecutives> executivePositionAdapt = new ArrayAdapter<ImeExecutives>(this,
+                android.R.layout.simple_list_item_1,
+                ImeExecutives.values());
+        executivePositionSpin.setAdapter(executivePositionAdapt);
 
 
+        Bundle extras = getIntent().getExtras();
+        referer = (extras != null) ? extras.getInt(SignInActivity.NEW_LOGIN) : 1;
+        if (referer != 0) {
+            settingClassSpin.setSelection(setClassAdapt.getPosition(ImeClasses.valueOf(userDetails.getLevel())));
 
+        }
 
 
         updateSetting.setOnClickListener(new View.OnClickListener() {
@@ -89,20 +100,40 @@ public class AccountSettingsActivity extends BaseActivity {
                     Toast.makeText(AccountSettingsActivity.this, "Cast Done", Toast.LENGTH_SHORT).show();
                 }
 
-                userDetails.setLevel(ImeClasses.get(selectedClass).name());
+                if (selectedClass == null) {
+                    Toast.makeText(AccountSettingsActivity.this, "Please select class", Toast.LENGTH_SHORT).show();
+                } else {
+                    userDetails.setLevel(ImeClasses.get(selectedClass).name());
 
-                userRepository.updateUser(userDetails);
+                    userRepository.updateUser(userDetails);
 
-                CurrentUserRepo.updateCurrentUser(userDetails);
-                Toast.makeText(AccountSettingsActivity.this, ImeClasses.get(selectedClass).name(), Toast.LENGTH_SHORT).show();
+                    CurrentUserRepo.updateCurrentUser(userDetails);
+                    updateUI();
+
+                }
             }
         });
 
 
     }
 
+    private void populateView() {
+
+    }
+
+    private void updateUI() {
+        Intent homeIntent = new Intent(this, HomeActivity.class);
+        startActivity(homeIntent);
+        finish();
+    }
+
     @Override
     protected boolean useToolbar() {
-        return super.useToolbar();
+        if (referer == 0) {
+            return false;
+        } else {
+            return super.useToolbar();
+        }
+
     }
 }

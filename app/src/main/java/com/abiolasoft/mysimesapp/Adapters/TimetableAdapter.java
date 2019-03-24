@@ -109,9 +109,6 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
             }
         });
 
-        if (position != timeTableList.size() - 1) {
-            holder.timetableInsert.setVisibility(View.VISIBLE);
-        }
 
     }
 

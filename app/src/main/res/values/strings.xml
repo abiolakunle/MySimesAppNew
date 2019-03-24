@@ -30,6 +30,10 @@
     <string name="request_executive">Request executive status</string>
     <string name="enter_request_code">Enter request code</string>
     <string name="select_position">Select executive position</string>
+    <string name="select_files">Select files</string>
+    <string name="zero_progress">0%</string>
+    <string name="add_ebook_tag">Add tags to book</string>
+    <string name="populate_timetable">Populate timetable</string>
 
 
     <string-array name="colors" translatable="false">

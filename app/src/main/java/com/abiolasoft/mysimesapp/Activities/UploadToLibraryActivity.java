@@ -137,7 +137,7 @@ public class UploadToLibraryActivity extends BaseActivity {
                         book.addTag(userDetail.getDisplayName());
                         book.setBook_title(fileName);
                         book.setUrl(taskSnapshot.getDownloadUrl().toString());
-                        book.setFile_size(String.valueOf(taskSnapshot.getTotalByteCount() / 1024));
+                        book.setFile_size(Long.valueOf(taskSnapshot.getTotalByteCount() / 1024));
                         book.setUploaded_by(userDetail.getDisplayName());
                         book.setTime_uploaded(System.currentTimeMillis() + "");
                         book.setFile_type(fileName.substring(fileName.lastIndexOf(".")));

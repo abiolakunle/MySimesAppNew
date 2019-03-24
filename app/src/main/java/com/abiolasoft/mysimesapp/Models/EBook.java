@@ -9,12 +9,12 @@ public class EBook {
     private String uploader_id;
     private String book_title;
     private String description;
-    private String file_size;
+    private long file_size;
     private String time_uploaded;
     private String uploaded_by;
     private String file_type;
     private String book_url;
-    private String user_id;
+    private String book_id;
     private List<String> book_tags;
 
     public EBook() {
@@ -52,12 +52,12 @@ public class EBook {
         this.uploader_id = uploader_id;
     }
 
-    public String getUser_id() {
-        return user_id;
+    public String getBook_id() {
+        return book_id;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setBook_id(String book_id) {
+        this.book_id = book_id;
     }
 
     public String getUrl() {
@@ -76,11 +76,11 @@ public class EBook {
         this.book_title = book_title;
     }
 
-    public String getFile_size() {
+    public long getFile_size() {
         return file_size;
     }
 
-    public void setFile_size(String file_size) {
+    public void setFile_size(long file_size) {
         this.file_size = file_size;
     }
 

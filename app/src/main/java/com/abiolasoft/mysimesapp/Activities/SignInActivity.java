@@ -30,11 +30,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
 
-public class MainActivity extends BaseActivity {
+public class SignInActivity extends BaseActivity {
 
     //For facebook login
     private CallbackManager callbackManager;
     private LoginButton loginButton;
+    public static String NEW_LOGIN = "newLogin";
 
     private GoogleSignInAccount googleAccount;
 
@@ -91,7 +92,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onSuccess(LoginResult loginResult){
-                Toast.makeText(MainActivity.this, "Facebook login successful", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignInActivity.this, "Facebook login successful", Toast.LENGTH_SHORT).show();
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
@@ -101,7 +102,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onError(FacebookException error){
-                Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignInActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -117,7 +118,7 @@ public class MainActivity extends BaseActivity {
 
                     FirebaseUser currUser = task.getResult().getUser();
 
-                    Toast.makeText(MainActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignInActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
 
                     //must be called under sign in with credentials
                     UserDetails userDetailsModel = new UserDetails();
@@ -182,8 +183,8 @@ public class MainActivity extends BaseActivity {
                             // Sign in success, update UI with the signed-in user's information
                             //Log.d(TAG, "signInWithCredential:success");
 
-                            Toast.makeText(MainActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-                            googleAccount = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
+                            Toast.makeText(SignInActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                            googleAccount = GoogleSignIn.getLastSignedInAccount(SignInActivity.this);
                             UserDetails userDetailsModel = new UserDetails();
 
                             if (googleAccount != null) {
@@ -203,7 +204,7 @@ public class MainActivity extends BaseActivity {
                             // If sign in fails, display a message to the user.
                             //Log.w(TAG, "signInWithCredential:failure", task.getException());
                             //Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                            Toast.makeText(MainActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignInActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
 
                         // ...
@@ -214,8 +215,10 @@ public class MainActivity extends BaseActivity {
 
 
     private void updateUI(){
-        Intent homeIntent = new Intent(MainActivity.this, HomeActivity.class);
+        Intent homeIntent = new Intent(SignInActivity.this, AccountSettingsActivity.class);
+        homeIntent.putExtra(NEW_LOGIN, 0);
         startActivity(homeIntent);
+        finish();
     }
 
 

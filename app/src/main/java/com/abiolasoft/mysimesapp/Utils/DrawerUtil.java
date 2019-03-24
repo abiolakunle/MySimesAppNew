@@ -13,6 +13,7 @@ import com.abiolasoft.mysimesapp.Activities.AccountSettingsActivity;
 import com.abiolasoft.mysimesapp.Activities.ELibraryActivity;
 import com.abiolasoft.mysimesapp.Activities.TimetableDayActivity;
 import com.abiolasoft.mysimesapp.Activities.UpdatePeriodActivity;
+import com.abiolasoft.mysimesapp.Activities.UploadMultipleToLibraryActivity;
 import com.abiolasoft.mysimesapp.Activities.UploadToLibraryActivity;
 import com.abiolasoft.mysimesapp.Models.UserDetails;
 import com.abiolasoft.mysimesapp.R;
@@ -148,6 +149,8 @@ public class DrawerUtil {
                                 drawerItemIntent = new Intent(activity, UpdatePeriodActivity.class);
                             } else if (identifier == 31) {
                                 drawerItemIntent = new Intent(activity, TimetableDayActivity.class);
+                            } else if (identifier == 43) {
+                                drawerItemIntent = new Intent(activity, UploadMultipleToLibraryActivity.class);
                             }
                         }
 
@@ -160,7 +163,7 @@ public class DrawerUtil {
                         /*if (drawerItem != null) {
                             Intent intent = null;
                             if (drawerItem.getIdentifier() == 1) {
-                                intent = new Intent(activity, MainActivity.class);
+                                intent = new Intent(activity, SignInActivity.class);
                             } else if (drawerItem.getIdentifier() == 2) {
                                 intent = new Intent(activity, MySimesBlog.class);
                             } else if (drawerItem.getIdentifier() == 31) {

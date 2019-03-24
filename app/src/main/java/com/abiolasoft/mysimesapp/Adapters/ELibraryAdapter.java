@@ -39,7 +39,7 @@ public class ELibraryAdapter extends RecyclerView.Adapter<ELibraryAdapter.ViewHo
 
         holder.libLetterImage.setLetter(ebooks.get(position).getBook_title().charAt(0));
         holder.eBookTitle.setText(ebooks.get(position).getBook_title());
-        holder.eBookSize.setText(ebooks.get(position).getFile_size());
+        holder.eBookSize.setText(String.valueOf(ebooks.get(position).getFile_size()) + "KB");
         holder.eBookDesc.setText(ebooks.get(position).getDescription());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
