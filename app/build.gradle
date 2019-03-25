@@ -47,6 +47,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.github.barteksc:android-pdf-viewer:3.1.0-beta.1'
     compile 'com.github.abumoallim:Android-Multi-Select-Dialog:v1.9'
+    //implementation 'com.google.android.material:material:1.0.0'
 
 
 }

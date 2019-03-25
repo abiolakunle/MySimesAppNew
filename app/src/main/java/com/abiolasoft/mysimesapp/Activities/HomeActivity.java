@@ -38,4 +38,8 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected boolean useToolbar() {
+        return false;
+    }
 }

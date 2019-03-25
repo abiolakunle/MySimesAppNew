@@ -42,7 +42,7 @@ public class SignInActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_sign_in);
         facebookLoginProp();
         googleSignIn();
 
@@ -123,7 +123,7 @@ public class SignInActivity extends BaseActivity {
                     //must be called under sign in with credentials
                     UserDetails userDetailsModel = new UserDetails();
                     for (UserInfo userInfo : currUser.getProviderData()) {
-                        userDetailsModel.setId(userInfo.getUid());
+                        userDetailsModel.setId(currUser.getUid());
                         userDetailsModel.setDisplayName(userInfo.getDisplayName());
                         userDetailsModel.setEmail(userInfo.getEmail());
                         userDetailsModel.setImage_thumb(userInfo.getPhotoUrl().toString() + "?height=500");
@@ -191,7 +191,7 @@ public class SignInActivity extends BaseActivity {
                                 for (UserInfo userInfo : currUser.getProviderData()) {
                                     userDetailsModel.setDisplayName(currUser.getDisplayName());
                                     userDetailsModel.setEmail(currUser.getEmail());
-                                    userDetailsModel.setId(userInfo.getUid());
+                                    userDetailsModel.setId(currUser.getUid());
                                     userDetailsModel.setImage_thumb(currUser.getPhotoUrl().toString());
                                     userDetailsModel.setImage_url(currUser.getPhotoUrl().toString());
                                     userDetailsModel.setPhone(userInfo.getPhoneNumber());
