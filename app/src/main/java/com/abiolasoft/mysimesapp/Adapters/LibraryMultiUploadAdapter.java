@@ -68,7 +68,7 @@ public class LibraryMultiUploadAdapter extends RecyclerView.Adapter<LibraryMulti
 
         //MultiSelectModel
         final MultiSelectDialog multiSelectDialog = new MultiSelectDialog()
-                .title("Add Tags") //setting title for dialog
+                .title("Add tags to book") //setting title for dialog
                 .titleSize(25)
                 .positiveText("Done")
                 .negativeText("Cancel")
@@ -80,7 +80,7 @@ public class LibraryMultiUploadAdapter extends RecyclerView.Adapter<LibraryMulti
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {
                         eBookTagList.put(position, selectedNames);
-                        holder.addBookTagTv.setText(selectedNames.size() + "tags added, tap to modify");
+                        holder.addBookTagTv.setText(selectedNames.size() + ((selectedNames.size() > 1) ? " tags added, tap to modify" : " tag added, tap to modify"));
                     }
 
                     @Override

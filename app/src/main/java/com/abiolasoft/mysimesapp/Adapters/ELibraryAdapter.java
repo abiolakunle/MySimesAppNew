@@ -20,6 +20,7 @@ public class ELibraryAdapter extends RecyclerView.Adapter<ELibraryAdapter.ViewHo
 
     private List<EBook> ebooks;
     private Context context;
+    public static String BOOK_ID = "bookId";
 
 
     public ELibraryAdapter(List<EBook> eBooks) {
@@ -48,7 +49,7 @@ public class ELibraryAdapter extends RecyclerView.Adapter<ELibraryAdapter.ViewHo
 
 
                 Intent bookViewerIntent = new Intent(context, EBookViewerActivity.class);
-                bookViewerIntent.putExtra(EBookViewerActivity.eBookViewerUrl, ebooks.get(position).getBook_url());
+                bookViewerIntent.putExtra(BOOK_ID, ebooks.get(position).getBook_id());
                 context.startActivity(bookViewerIntent);
 
             }

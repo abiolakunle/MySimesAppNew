@@ -11,8 +11,8 @@ import android.widget.ImageView;
 
 import com.abiolasoft.mysimesapp.Activities.AccountSettingsActivity;
 import com.abiolasoft.mysimesapp.Activities.ELibraryActivity;
+import com.abiolasoft.mysimesapp.Activities.HomeActivity;
 import com.abiolasoft.mysimesapp.Activities.TimetableDayActivity;
-import com.abiolasoft.mysimesapp.Activities.UpdatePeriodActivity;
 import com.abiolasoft.mysimesapp.Activities.UploadMultipleToLibraryActivity;
 import com.abiolasoft.mysimesapp.Activities.UploadToLibraryActivity;
 import com.abiolasoft.mysimesapp.Models.UserDetails;
@@ -98,29 +98,22 @@ public class DrawerUtil {
         //if you want to update the items at a later time it is recommended to keep it in a variable
         //PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("MySimesMessenger").withIdentifier(1);
 
-        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("MySimesForum").withIdentifier(1);
+        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("My Forum").withIdentifier(1);
 
 
-        ExpandableDrawerItem item3 = new ExpandableDrawerItem().withName("Timetable").withSubItems(
-                new SecondaryDrawerItem().withName("My Timetable").withIdentifier(31),
-                new SecondaryDrawerItem().withName("Edit time table").withIdentifier(32),
-                new SecondaryDrawerItem().withName("Add course").withIdentifier(33)
-        );
+        ExpandableDrawerItem item3 = new ExpandableDrawerItem().withName("My timetable").withIdentifier(2);
 
-        ExpandableDrawerItem item4 = new ExpandableDrawerItem().withName("MySimes E-Library").withSubItems(
-                new SecondaryDrawerItem().withName("ELibrary").withIdentifier(41),
-                new SecondaryDrawerItem().withName("Upload a File").withIdentifier(42),
-                new SecondaryDrawerItem().withName("Upload Multiple Files").withIdentifier(43)
+        ExpandableDrawerItem item4 = new ExpandableDrawerItem().withName("My  E-Library").withSubItems(
+                new SecondaryDrawerItem().withName("ELibrary").withIdentifier(3),
+                new SecondaryDrawerItem().withName("Upload a File").withIdentifier(4),
+                new SecondaryDrawerItem().withName("Upload Multiple Files").withIdentifier(5)
 
         );
 
-        ExpandableDrawerItem item5 = new ExpandableDrawerItem().withName("Executives").withSubItems(
-                new SecondaryDrawerItem().withName("My Executives").withIdentifier(51),
-                new SecondaryDrawerItem().withName("Join Executives").withIdentifier(52)
-        );
+        ExpandableDrawerItem item5 = new ExpandableDrawerItem().withName("Executives").withIdentifier(6);
 
 
-        PrimaryDrawerItem item6 = new PrimaryDrawerItem().withName("Logout").withIdentifier(6);
+        PrimaryDrawerItem item6 = new PrimaryDrawerItem().withName("Logout").withIdentifier(7);
 
 
         Drawer result = new DrawerBuilder()
@@ -141,16 +134,16 @@ public class DrawerUtil {
                         long identifier = drawerItem.getIdentifier();
 
                         if (drawerItem != null) {
-                            if (identifier == 42) {
+                            if (identifier == 4) {
                                 drawerItemIntent = new Intent(activity, UploadToLibraryActivity.class);
-                            } else if (identifier == 41) {
+                            } else if (identifier == 3) {
                                 drawerItemIntent = new Intent(activity, ELibraryActivity.class);
-                            } else if (identifier == 33) {
-                                drawerItemIntent = new Intent(activity, UpdatePeriodActivity.class);
-                            } else if (identifier == 31) {
+                            } else if (identifier == 2) {
                                 drawerItemIntent = new Intent(activity, TimetableDayActivity.class);
-                            } else if (identifier == 43) {
+                            } else if (identifier == 5) {
                                 drawerItemIntent = new Intent(activity, UploadMultipleToLibraryActivity.class);
+                            } else if (identifier == 1) {
+                                drawerItemIntent = new Intent(activity, HomeActivity.class);
                             }
                         }
 
@@ -211,6 +204,5 @@ public class DrawerUtil {
                 .withName(currentUserDetails.getDisplayName())
                 .withEmail(currentUserDetails.getEmail()));*/
     }
-
 
 }

@@ -17,6 +17,7 @@ import com.abdeveloper.library.MultiSelectModel;
 import com.abiolasoft.mysimesapp.Adapters.LibraryMultiUploadAdapter;
 import com.abiolasoft.mysimesapp.Models.Course;
 import com.abiolasoft.mysimesapp.Models.EBook;
+import com.abiolasoft.mysimesapp.Models.UserDetails;
 import com.abiolasoft.mysimesapp.R;
 import com.abiolasoft.mysimesapp.Repositories.CurrentUserRepo;
 import com.abiolasoft.mysimesapp.Utils.DbPaths;
@@ -25,6 +26,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -176,6 +178,7 @@ public class UploadMultipleToLibraryActivity extends BaseActivity {
         StorageReference storageRef = FirebaseStorage.getInstance().getReference().child(DbPaths.ELibrary.toString());
 
         final Map<Integer, ArrayList> eBookTags = LibraryMultiUploadAdapter.getEBookTagList();
+        final UserDetails userDetail = CurrentUserRepo.getOffline();
 
         for (int i = 0; i < fileNameList.size(); i++) {
             final int position = i;
@@ -183,7 +186,7 @@ public class UploadMultipleToLibraryActivity extends BaseActivity {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                    EBook uploadedBook = new EBook();
+                    final EBook uploadedBook = new EBook();
                     uploadedBook.setBook_title(fileNameList.get(position));
                     uploadedBook.setBook_id(String.valueOf(taskSnapshot.hashCode()));
                     uploadedBook.setBook_url(taskSnapshot.getDownloadUrl().toString());
@@ -194,11 +197,12 @@ public class UploadMultipleToLibraryActivity extends BaseActivity {
                     uploadedBook.setBook_tags(eBookTags.get(position));
 
 
-                    dbRef.document(String.valueOf(taskSnapshot.hashCode())).set(uploadedBook).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    dbRef.add(uploadedBook).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
-                        public void onComplete(@NonNull Task<Void> task) {
+                        public void onSuccess(DocumentReference documentReference) {
                             Toast.makeText(UploadMultipleToLibraryActivity.this, "Details written to Db", Toast.LENGTH_SHORT).show();
-
+                            userDetail.addToDocuments(documentReference.getId());
+                            CurrentUserRepo.updateCurrentUser(userDetail);
                         }
                     });
                 }

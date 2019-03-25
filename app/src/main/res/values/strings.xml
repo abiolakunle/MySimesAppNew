@@ -34,6 +34,10 @@
     <string name="zero_progress">0%</string>
     <string name="add_ebook_tag">Add tags to book</string>
     <string name="populate_timetable">Populate timetable</string>
+    <string name="user_name">User name</string>
+    <string name="download">Download</string>
+    <string name="uploader">Uploader</string>
+    <string name="file_type">File type</string>
 
 
     <string-array name="colors" translatable="false">

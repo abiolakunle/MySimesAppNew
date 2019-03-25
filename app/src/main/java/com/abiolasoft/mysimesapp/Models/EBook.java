@@ -16,11 +16,27 @@ public class EBook {
     private String book_url;
     private String book_id;
     private List<String> book_tags;
+    private List<String> book_custom_tags;
 
     public EBook() {
         if (book_tags == null) {
             book_tags = new ArrayList<>();
         }
+        if (book_custom_tags == null) {
+            book_custom_tags = new ArrayList<>();
+        }
+    }
+
+    public void addCustomTag(String tag) {
+        book_custom_tags.add(tag);
+    }
+
+    public List<String> getBook_custom_tags() {
+        return book_custom_tags;
+    }
+
+    public void setBook_custom_tags_tags(List<String> book_custom_tags) {
+        this.book_custom_tags = book_custom_tags;
     }
 
 

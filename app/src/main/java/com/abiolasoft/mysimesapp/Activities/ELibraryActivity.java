@@ -46,9 +46,11 @@ public class ELibraryActivity extends BaseActivity {
         dbRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-
+                eBooks.clear();
                 for (DocumentSnapshot result : documentSnapshots) {
-                    eBooks.add(result.toObject(EBook.class));
+                    EBook eBook = result.toObject(EBook.class);
+                    eBook.setBook_id(result.getId());
+                    eBooks.add(eBook);
                     eLibraryAdapter.notifyDataSetChanged();
                 }
             }

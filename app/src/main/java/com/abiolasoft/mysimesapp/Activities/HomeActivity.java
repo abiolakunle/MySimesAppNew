@@ -17,9 +17,7 @@ public class HomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
         SeedDatabase.populateCourses(this);
-
     }
 
     @Override
@@ -39,4 +37,5 @@ public class HomeActivity extends BaseActivity {
             finish();
         }
     }
+
 }

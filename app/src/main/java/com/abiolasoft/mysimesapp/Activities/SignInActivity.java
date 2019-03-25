@@ -123,14 +123,14 @@ public class SignInActivity extends BaseActivity {
                     //must be called under sign in with credentials
                     UserDetails userDetailsModel = new UserDetails();
                     for (UserInfo userInfo : currUser.getProviderData()) {
-                        //userDetailsModel.setId(userInfo.getUid());
+                        userDetailsModel.setId(userInfo.getUid());
                         userDetailsModel.setDisplayName(userInfo.getDisplayName());
                         userDetailsModel.setEmail(userInfo.getEmail());
                         userDetailsModel.setImage_thumb(userInfo.getPhotoUrl().toString() + "?height=500");
                         userDetailsModel.setImage_url(userInfo.getPhotoUrl().toString()); //?type=large
                         userDetailsModel.setPhone(userInfo.getPhoneNumber());
                     }
-                    userDetailsModel.setId(currUser.getUid());
+
                     CurrentUserRepo.updateCurrentUser(userDetailsModel);
 
                     updateUI();
@@ -181,28 +181,28 @@ public class SignInActivity extends BaseActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            //Log.d(TAG, "signInWithCredential:success");
+                            FirebaseUser currUser = task.getResult().getUser();
 
                             Toast.makeText(SignInActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                             googleAccount = GoogleSignIn.getLastSignedInAccount(SignInActivity.this);
                             UserDetails userDetailsModel = new UserDetails();
 
                             if (googleAccount != null) {
-                                userDetailsModel.setDisplayName(googleAccount.getDisplayName());
-                                userDetailsModel.setEmail(googleAccount.getEmail());
-                                userDetailsModel.setId(googleAccount.getId());
-                                userDetailsModel.setImage_thumb(googleAccount.getPhotoUrl().toString());
-                                userDetailsModel.setImage_url(googleAccount.getPhotoUrl().toString());
+                                for (UserInfo userInfo : currUser.getProviderData()) {
+                                    userDetailsModel.setDisplayName(currUser.getDisplayName());
+                                    userDetailsModel.setEmail(currUser.getEmail());
+                                    userDetailsModel.setId(userInfo.getUid());
+                                    userDetailsModel.setImage_thumb(currUser.getPhotoUrl().toString());
+                                    userDetailsModel.setImage_url(currUser.getPhotoUrl().toString());
+                                    userDetailsModel.setPhone(userInfo.getPhoneNumber());
+                                }
                             }
-
                             //must be called under sign in with credentials
                             CurrentUserRepo.updateCurrentUser(userDetailsModel);
-
 
                             updateUI();
                         } else {
                             // If sign in fails, display a message to the user.
-                            //Log.w(TAG, "signInWithCredential:failure", task.getException());
                             //Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                             Toast.makeText(SignInActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }

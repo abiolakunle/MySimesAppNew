@@ -28,7 +28,6 @@ public class AccountSettingsActivity extends BaseActivity {
     private EditText requestCodeEdit;
     private Switch requestExecutiveSw;
     private Button updateSetting;
-
     private String selectedClass;
     private int referer;
     private UserDetails userDetails;
@@ -83,7 +82,6 @@ public class AccountSettingsActivity extends BaseActivity {
 
         }
 
-
         updateSetting.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -109,22 +107,9 @@ public class AccountSettingsActivity extends BaseActivity {
 
                     CurrentUserRepo.updateCurrentUser(userDetails);
                     updateUI();
-
                 }
             }
         });
-
-
-    }
-
-    private void populateView() {
-
-    }
-
-    private void updateUI() {
-        Intent homeIntent = new Intent(this, HomeActivity.class);
-        startActivity(homeIntent);
-        finish();
     }
 
     @Override
@@ -132,8 +117,13 @@ public class AccountSettingsActivity extends BaseActivity {
         if (referer == 0) {
             return false;
         } else {
-            return super.useToolbar();
+            return true;
         }
+    }
 
+    private void updateUI() {
+        Intent homeIntent = new Intent(this, HomeActivity.class);
+        startActivity(homeIntent);
+        finish();
     }
 }

@@ -41,7 +41,8 @@
         <activity android:name=".Activities.TimeTableActivity" />
         <activity android:name=".Activities.AccountSettingsActivity" />
         <activity android:name=".Activities.TimetableDayActivity" />
-        <activity android:name=".Activities.UploadMultipleToLibraryActivity"></activity>
+        <activity android:name=".Activities.UploadMultipleToLibraryActivity" />
+        <activity android:name=".Activities.AllUsersActivity"></activity>
     </application>
 
 </manifest>

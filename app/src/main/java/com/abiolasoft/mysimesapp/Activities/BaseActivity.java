@@ -84,6 +84,9 @@ public abstract class BaseActivity extends AppCompatActivity {
                 startActivity(menuItemIntent);
                 break;
             case R.id.main_all_users_btn:
+                menuItemIntent = new Intent(this, AllUsersActivity.class);
+                startActivity(menuItemIntent);
+
                 break;
             case R.id.main_logout_btn:
                 sendToLogin();
