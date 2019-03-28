@@ -11,7 +11,7 @@ import com.abiolasoft.mysimesapp.R;
 
 import java.util.Random;
 
-public class LetterImageView extends android.support.v7.widget.AppCompatImageView {
+public class LetterImageView extends androidx.appcompat.widget.AppCompatImageView {
 
     private char mLetter;
     private Paint mTextPaint;

@@ -2,7 +2,6 @@ package com.abiolasoft.mysimesapp.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Toast;
 
@@ -29,6 +28,8 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
+
+import androidx.annotation.NonNull;
 
 public class SignInActivity extends BaseActivity {
 

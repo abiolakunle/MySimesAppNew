@@ -4,6 +4,7 @@
     <!-- Facebook Strings -->
     <string name="facebook_app_id">244159339802348</string>
     <string name="fb_login_protocol_scheme">fb244159339802348</string>
+    <!--<string name="default_web_client_id">54315508287-33lrcv02mu14on99pc118jqgm0epp2mv.apps.googleusercontent.com</string>-->
     <string name="select_file">Select a file</string>
     <string name="no_file_selected">No file selected</string>
     <string name="start_upload">Start Upload</string>
@@ -38,6 +39,8 @@
     <string name="download">Download</string>
     <string name="uploader">Uploader</string>
     <string name="file_type">File type</string>
+    <string name="send">Send</string>
+    <string name="add_image">Add Image</string>
 
 
     <string-array name="colors" translatable="false">

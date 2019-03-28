@@ -1,8 +1,6 @@
 package com.abiolasoft.mysimesapp.Activities;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 
 import com.abiolasoft.mysimesapp.Adapters.ELibraryAdapter;
 import com.abiolasoft.mysimesapp.Models.EBook;
@@ -17,6 +15,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class ELibraryActivity extends BaseActivity {
 

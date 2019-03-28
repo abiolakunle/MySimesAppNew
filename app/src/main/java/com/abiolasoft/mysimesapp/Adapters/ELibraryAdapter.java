@@ -2,8 +2,6 @@ package com.abiolasoft.mysimesapp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +13,9 @@ import com.abiolasoft.mysimesapp.R;
 import com.abiolasoft.mysimesapp.Utils.LetterImageView;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class ELibraryAdapter extends RecyclerView.Adapter<ELibraryAdapter.ViewHolder> {
 

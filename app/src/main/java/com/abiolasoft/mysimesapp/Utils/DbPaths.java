@@ -4,6 +4,9 @@ public enum DbPaths {
     ELibrary,
     Users,
     Courses,
-    Classes
+    Classes,
+    MessageImages,
+    MessageImageThumbs,
+    HomeMessages
 }
 

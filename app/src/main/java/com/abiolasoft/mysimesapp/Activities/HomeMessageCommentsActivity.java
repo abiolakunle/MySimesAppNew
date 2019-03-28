@@ -4,11 +4,16 @@ import android.os.Bundle;
 
 import com.abiolasoft.mysimesapp.R;
 
-public class FacebookActivity extends BaseActivity {
+public class HomeMessageCommentsActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_facebook);
+        setContentView(R.layout.activity_home_message_comments);
+    }
+
+    @Override
+    protected boolean useToolbar() {
+        return super.useToolbar();
     }
 }

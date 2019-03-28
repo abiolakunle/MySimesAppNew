@@ -1,16 +1,19 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
+    //buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "com.abiolasoft.mysimesapp"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+
+        //Error: null, Cannot fit requested classes in a single dex file (# methods: 70025 > 65536)
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -22,9 +25,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
+    implementation 'com.google.android.material:material:1.0.0-beta01'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
     implementation 'com.google.firebase:firebase-auth:11.8.0'
     implementation 'com.google.firebase:firebase-storage:11.8.0'
     implementation 'com.google.firebase:firebase-firestore:11.8.0'
@@ -32,8 +35,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:11.8.0'
     //implementation 'com.google.android.gms:play-services:16.0.1'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
     implementation 'com.facebook.android:facebook-login:[4,5)'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation('com.mikepenz:materialdrawer:5.3.3@aar') {
@@ -43,11 +46,20 @@ dependencies {
     implementation 'com.mikepenz:google-material-typeface:3.0.1.2.original@aar'
     implementation 'com.mikepenz:fontawesome-typeface:5.0.13.0@aar'
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.android.support:cardview-v7:27.1.1'
+    implementation 'androidx.cardview:cardview:1.0.0-beta01'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.github.barteksc:android-pdf-viewer:3.1.0-beta.1'
-    compile 'com.github.abumoallim:Android-Multi-Select-Dialog:v1.9'
-    //implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.github.abumoallim:Android-Multi-Select-Dialog:v1.9'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0-rc02'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
+    implementation 'id.zelory:compressor:2.1.0'
+
+    //Error: null, Cannot fit requested classes in a single dex file (# methods: 70025 > 65536)
+    implementation 'com.android.support:multidex:1.0.3'
+
+    //Error inflating class androidx.constraintlayout.widget.ConstraintLayout
+    implementation "androidx.constraintlayout:constraintlayout:1.1.3"
 
 
 }

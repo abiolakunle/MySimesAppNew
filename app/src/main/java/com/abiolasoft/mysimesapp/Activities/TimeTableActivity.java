@@ -2,8 +2,6 @@ package com.abiolasoft.mysimesapp.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.abiolasoft.mysimesapp.Adapters.TimetableAdapter;
@@ -20,6 +18,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class TimeTableActivity extends BaseActivity {
 
@@ -66,14 +67,15 @@ public class TimeTableActivity extends BaseActivity {
 
                     timeTableList.clear();
 
-                    if (result.isEmpty()) {
-                        Intent addIntent = new Intent(TimeTableActivity.this, UpdatePeriodActivity.class);
-                        startActivity(addIntent);
-                    }
                     for (int i = 0; i < result.size(); i++) {
                         if (result.get(i).getDayOfWeek().equals(dayExtra)) {
                             timeTableList.add(result.get(i));
                             timetableAdapter.notifyDataSetChanged();
+                        }
+                        if (timeTableList.size() == 0) {
+                            Intent addIntent = new Intent(TimeTableActivity.this, UpdatePeriodActivity.class);
+                            startActivity(addIntent);
+                            finish();
                         }
 
                     }

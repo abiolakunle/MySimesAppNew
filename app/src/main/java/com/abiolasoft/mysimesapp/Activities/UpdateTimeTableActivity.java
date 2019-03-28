@@ -2,10 +2,11 @@ package com.abiolasoft.mysimesapp.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 
 import com.abiolasoft.mysimesapp.R;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class UpdateTimeTableActivity extends AppCompatActivity {
 

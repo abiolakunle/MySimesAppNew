@@ -1,7 +1,6 @@
 package com.abiolasoft.mysimesapp.Repositories;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.abiolasoft.mysimesapp.Interfaces.UserRepositoryInterface;
@@ -16,6 +15,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 public class UserRepository implements UserRepositoryInterface<UserDetails> {
 

@@ -1,7 +1,6 @@
 package com.abiolasoft.mysimesapp.Utils;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import com.abiolasoft.mysimesapp.Models.Course;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -11,6 +10,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 public class SeedDatabase {
 

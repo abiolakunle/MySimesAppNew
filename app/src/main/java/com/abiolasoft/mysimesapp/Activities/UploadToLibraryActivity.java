@@ -7,9 +7,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -28,6 +25,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class UploadToLibraryActivity extends BaseActivity {
 
@@ -114,10 +115,17 @@ public class UploadToLibraryActivity extends BaseActivity {
     }
 
     private void openFileSelect() {
-        Intent selectFileIntent = new Intent();
+        /*Intent selectFileIntent = new Intent();
         selectFileIntent.setType("application/pdf");
         selectFileIntent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(selectFileIntent, 86);
+        startActivityForResult(selectFileIntent, 86);*/
+
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        String[] mimeTypes = {"application/pdf", "application/doc"};
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        startActivityForResult(intent, 86);
     }
 
     private void uploadFile(Uri uri) {

@@ -1,11 +1,12 @@
 package com.abiolasoft.mysimesapp.Activities;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 
 import com.abiolasoft.mysimesapp.Adapters.TimetableDayAdapter;
 import com.abiolasoft.mysimesapp.R;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class TimetableDayActivity extends BaseActivity {
 
