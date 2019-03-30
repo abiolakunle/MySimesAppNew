@@ -19,7 +19,6 @@ import com.abiolasoft.mysimesapp.Models.UserDetails;
 import com.abiolasoft.mysimesapp.R;
 import com.abiolasoft.mysimesapp.Repositories.CurrentUserRepo;
 import com.abiolasoft.mysimesapp.Utils.DbPaths;
-import com.abiolasoft.mysimesapp.Utils.SeedDatabase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -102,28 +101,37 @@ public class HomeActivity extends BaseActivity {
             }
         });
 
-        SeedDatabase.populateCourses(this);
+
 
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
         auth = FirebaseAuth.getInstance();
         Intent redirectIntent;
         if (auth.getCurrentUser() == null) {
             redirectIntent = new Intent(this, SignInActivity.class);
+            Toast.makeText(this, "Not signed in", Toast.LENGTH_SHORT).show();
             startActivity(redirectIntent);
             finish();
-        }
-        if (CurrentUserRepo.getOffline().getLevel() == null) {
+        } else if (CurrentUserRepo.getOffline().getLevel() == null) {
             redirectIntent = new Intent(this, AccountSettingsActivity.class);
             redirectIntent.putExtra(SignInActivity.NEW_LOGIN, 0);
+            Toast.makeText(this, "signed in class not set", Toast.LENGTH_SHORT).show();
             startActivity(redirectIntent);
             finish();
         }
     }
 
+    @Override
+    protected boolean useToolbar() {
+        if (user == null) {
+            return false;
+        }
+        return super.useToolbar();
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -285,6 +293,5 @@ public class HomeActivity extends BaseActivity {
             }
         });
     }
-
 
 }

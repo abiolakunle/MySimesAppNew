@@ -52,15 +52,13 @@ public class SignInActivity extends BaseActivity {
     @Override
     protected void onStart(){
         super.onStart();
-
-        if (user != null) {
-            updateUI();
-        }
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == 60) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -77,7 +75,7 @@ public class SignInActivity extends BaseActivity {
             //for facebook login
             callbackManager.onActivityResult(requestCode, resultCode, data);
         }
-        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
     @Override
@@ -89,6 +87,7 @@ public class SignInActivity extends BaseActivity {
         callbackManager = CallbackManager.Factory.create();
         loginButton = findViewById(R.id.fb_login_button);
         loginButton.setReadPermissions("email", "public_profile");
+
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>(){
 
             @Override
@@ -141,7 +140,6 @@ public class SignInActivity extends BaseActivity {
         });
     }
 
-
     private void googleSignIn() {
 
         SignInButton signInButton = findViewById(R.id.sign_in_button);
@@ -157,10 +155,10 @@ public class SignInActivity extends BaseActivity {
 
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
-        googleAccount = GoogleSignIn.getLastSignedInAccount(this);
+        /*googleAccount = GoogleSignIn.getLastSignedInAccount(this);
         if (googleAccount != null) {
             updateUI();
-        }
+        }*/
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,14 +211,11 @@ public class SignInActivity extends BaseActivity {
                 });
     }
 
-
-
     private void updateUI(){
-        Intent homeIntent = new Intent(SignInActivity.this, AccountSettingsActivity.class);
-        homeIntent.putExtra(NEW_LOGIN, 0);
-        startActivity(homeIntent);
+        Intent settingIntent = new Intent(SignInActivity.this, AccountSettingsActivity.class);
+        settingIntent.putExtra(NEW_LOGIN, 0);
+        startActivity(settingIntent);
         finish();
     }
-
 
 }

@@ -46,6 +46,7 @@ public class TimetableDayAdapter extends RecyclerView.Adapter<TimetableDayAdapte
             public void onClick(View v) {
                 Intent periodIntent = new Intent(context, TimeTableActivity.class);
                 periodIntent.putExtra(DAY_KEY, days[position]);
+
                 context.startActivity(periodIntent);
             }
         });

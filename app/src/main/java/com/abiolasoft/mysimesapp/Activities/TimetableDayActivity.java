@@ -26,6 +26,7 @@ public class TimetableDayActivity extends BaseActivity {
         daysRecycler.setAdapter(timetableDayAdapter);
         daysRecycler.setLayoutManager(new LinearLayoutManager(this));
 
+
     }
 
     @Override

@@ -54,7 +54,8 @@ public class UserRepository implements UserRepositoryInterface<UserDetails> {
 
     @Override
     public void addUser(final UserDetails userDetails) {
-        db.collection(DbPaths.Users.toString()).document(userDetails.getId()).set(userDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
+        db.collection(DbPaths.Users.toString()).document(userDetails.getId()).set(userDetails)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Toast.makeText(context, "Data Updated to Db", Toast.LENGTH_SHORT).show();

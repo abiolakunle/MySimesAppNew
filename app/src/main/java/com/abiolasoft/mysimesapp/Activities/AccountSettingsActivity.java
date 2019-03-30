@@ -79,7 +79,6 @@ public class AccountSettingsActivity extends BaseActivity {
         referer = (extras != null) ? extras.getInt(SignInActivity.NEW_LOGIN) : 1;
         if (referer != 0) {
             settingClassSpin.setSelection(setClassAdapt.getPosition(ImeClasses.valueOf(userDetails.getLevel())));
-
         }
 
         updateSetting.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +103,6 @@ public class AccountSettingsActivity extends BaseActivity {
                     userDetails.setLevel(ImeClasses.get(selectedClass).name());
 
                     userRepository.updateUser(userDetails);
-
                     CurrentUserRepo.updateCurrentUser(userDetails);
                     updateUI();
                 }

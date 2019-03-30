@@ -9,13 +9,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.abiolasoft.mysimesapp.Activities.TimeTableActivity;
 import com.abiolasoft.mysimesapp.Activities.UpdatePeriodActivity;
 import com.abiolasoft.mysimesapp.Models.Course;
 import com.abiolasoft.mysimesapp.Models.ImeClass;
 import com.abiolasoft.mysimesapp.Models.TimeTablePeriod;
 import com.abiolasoft.mysimesapp.R;
+import com.abiolasoft.mysimesapp.Repositories.CurrentUserRepo;
 import com.abiolasoft.mysimesapp.Utils.DbPaths;
-import com.abiolasoft.mysimesapp.Utils.ImeClassSharedPref;
 import com.abiolasoft.mysimesapp.Utils.LetterImageView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -33,7 +34,7 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
     private List<ImeClass> imeClass;
     public static final String UPDATE_KEY = "edit";
     public static final String POSITION_KEY = "position";
-    public static final String CLASS_CODE = "ImeClass";
+    public static final String CLASS_CODE = CurrentUserRepo.getOffline().getLevel();
 
 
 
@@ -80,6 +81,7 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
                 updateIntent.putExtra(UPDATE_KEY, 0);
                 updateIntent.putExtra(POSITION_KEY, position);
                 context.startActivity(updateIntent);
+
             }
         });
 
@@ -87,14 +89,24 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
             @Override
             public void onClick(View v) {
 
+                final String dayRemovedFrom = timeTableList.get(position).getDayOfWeek();
                 timeTableList.remove(timeTableList.get(position));
                 imeClass.get(0).setTimeTable(timeTableList);
 
-                firebaseFirestore.collection(DbPaths.Classes.toString()).document(String.valueOf(imeClass.get(0).getClassCode())).set(imeClass.get(0)).addOnCompleteListener(new OnCompleteListener<Void>() {
+                /*ImeClassSharedPref imeClassSharedPref = new ImeClassSharedPref();
+                imeClassSharedPref.setObj(UpdateTimeTableActivity.CLASS_CODE, imeClass.get(0));*/
+
+                firebaseFirestore.collection(DbPaths.Classes.toString()).document(String.valueOf(imeClass.get(0).getClassCode()))
+                        .set(imeClass.get(0)).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+
                         Toast.makeText(context, "Deleted successfully", Toast.LENGTH_SHORT).show();
-                        notifyForBtn();
+                        Intent timetableIntent = new Intent(context, TimeTableActivity.class);
+                        timetableIntent.putExtra(TimetableDayAdapter.DAY_KEY, dayRemovedFrom);
+                        context.startActivity(timetableIntent);
+
+                        //notifyForBtn();
                     }
                 });
 
@@ -104,8 +116,10 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
         holder.timetableInsert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent insertIntent = updateIntent().putExtra(POSITION_KEY, position + 1);
+                Intent insertIntent = updateIntent();
+                insertIntent.putExtra(POSITION_KEY, position + 1);
                 insertIntent.putExtra(UPDATE_KEY, 1);
+                insertIntent.putExtra(TimetableDayAdapter.DAY_KEY, timeTableList.get(position).getDayOfWeek());
                 context.startActivity(insertIntent);
             }
         });
@@ -123,8 +137,8 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
     }
 
     private Intent updateIntent() {
-        ImeClassSharedPref imeClassSharedPref = new ImeClassSharedPref();
-        imeClassSharedPref.setObj(CLASS_CODE, imeClass.get(0));
+        /*ImeClassSharedPref imeClassSharedPref = new ImeClassSharedPref();
+        imeClassSharedPref.setObj(CLASS_CODE, imeClass.get(0));*/
         Intent editIntent = new Intent(context, UpdatePeriodActivity.class);
         return editIntent;
     }

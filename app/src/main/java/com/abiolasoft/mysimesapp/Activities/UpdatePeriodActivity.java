@@ -57,6 +57,7 @@ public class UpdatePeriodActivity extends BaseActivity {
 
         courseSpinner = findViewById(R.id.timetable_course_spinner);
         dayOfWeekSpin = findViewById(R.id.day_of_week_spin);
+        dayOfWeekSpin.setEnabled(false);
         updateBtn = findViewById(R.id.update_timetable_btn);
         startTimeHourSpin = findViewById(R.id.start_hour);
         startTimeMinSpin = findViewById(R.id.start_min);
@@ -122,6 +123,7 @@ public class UpdatePeriodActivity extends BaseActivity {
                                 Intent timetableIntent = new Intent(UpdatePeriodActivity.this, TimeTableActivity.class);
                                 timetableIntent.putExtra(TimetableDayAdapter.DAY_KEY, timeTablePeriod.getDayOfWeek());
                                 startActivity(timetableIntent);
+                                finish();
                             }
                         }
                     });
@@ -213,6 +215,14 @@ public class UpdatePeriodActivity extends BaseActivity {
                         classToEdit = new ImeClassSharedPref().getObj(TimetableAdapter.CLASS_CODE);
                         positionToEdit = intentExtras.getInt(TimetableAdapter.POSITION_KEY);
                         editOrInsert = intentExtras.getInt(TimetableAdapter.UPDATE_KEY);
+
+                        String dayOfWeekExtra = intentExtras.getString(TimetableDayAdapter.DAY_KEY);
+                        if (dayOfWeekExtra != null) {
+                            ArrayAdapter dayWeekAdapt = (ArrayAdapter) dayOfWeekSpin.getAdapter();
+                            int dayOfWeekPos = dayWeekAdapt.getPosition(dayOfWeekExtra);
+                            dayOfWeekSpin.setSelection(dayOfWeekPos);
+                        }
+
 
                         if (editOrInsert == 0) {
 

@@ -10,10 +10,14 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.abiolasoft.mysimesapp.Models.ImeClass;
 import com.abiolasoft.mysimesapp.Models.UserDetails;
 import com.abiolasoft.mysimesapp.R;
 import com.abiolasoft.mysimesapp.Repositories.CurrentUserRepo;
+import com.abiolasoft.mysimesapp.Utils.DbPaths;
 import com.abiolasoft.mysimesapp.Utils.DrawerUtil;
+import com.abiolasoft.mysimesapp.Utils.ImeClassSharedPref;
+import com.abiolasoft.mysimesapp.Utils.SeedDatabase;
 import com.abiolasoft.mysimesapp.Utils.UserSharedPref;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -23,6 +27,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,10 +51,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
+        SeedDatabase.populateCourses(this);
+
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-
-
+        if (user != null) {
+            updateSharePrefs();
+        }
 /*
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -68,6 +79,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
     }
 
     @Override
@@ -154,4 +166,40 @@ public abstract class BaseActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    private void updateSharePrefs() {
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+
+        final UserDetails currentUser = CurrentUserRepo.getOffline();
+
+        //listen for changes in current user's detail
+        firebaseFirestore.collection(DbPaths.Users.toString()).document(currentUser.getId())
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                        if (documentSnapshot.exists()) {
+                            UserSharedPref userSharedPref = new UserSharedPref();
+                            userSharedPref.setObj(currentUser.getId(), documentSnapshot.toObject(UserDetails.class));
+                        }
+                    }
+                });
+
+        //listen for changes in current user's class
+        final String userLevel = currentUser.getLevel();
+        if (userLevel != null) {
+            firebaseFirestore.collection(DbPaths.Classes.toString()).document(userLevel)
+                    .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                        @Override
+                        public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                            if (documentSnapshot.exists()) {
+                                ImeClassSharedPref imeClassSharedPref = new ImeClassSharedPref();
+                                imeClassSharedPref.setObj(userLevel, documentSnapshot.toObject(ImeClass.class));
+                            }
+
+                        }
+                    });
+        }
+
+    }
+
 }

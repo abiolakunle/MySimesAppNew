@@ -30,6 +30,7 @@ public class TimeTableActivity extends BaseActivity {
     private List<TimeTablePeriod> timeTableList;
     private TimetableAdapter timetableAdapter;
     private List<ImeClass> imeClass;
+    private String dayExtra;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,8 @@ public class TimeTableActivity extends BaseActivity {
         recyclerView.setAdapter(timetableAdapter);
 
         getTimetableFromDb();
+
+
     }
 
     @Override
@@ -57,29 +60,50 @@ public class TimeTableActivity extends BaseActivity {
 
     private void getTimetableFromDb() {
 
+        dayExtra = getIntent().getExtras().getString(TimetableDayAdapter.DAY_KEY);
+
         firebaseFirestore.collection(DbPaths.Classes.toString()).document(CurrentUserRepo.getOffline().getLevel()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
                 if (documentSnapshot.exists()) {
+                    imeClass.clear();
                     imeClass.add(documentSnapshot.toObject(ImeClass.class));
+                    imeClass.get(0).setClassCode(CurrentUserRepo.getOffline().getLevel());
                     List<TimeTablePeriod> result = documentSnapshot.toObject(ImeClass.class).getTimeTable();
-                    String dayExtra = getIntent().getExtras().getString(TimetableDayAdapter.DAY_KEY);
+
+
+                    //gets day the item that was deleted by subtracting new from old list
+                    /*if(!timeTableList.isEmpty()){
+                        timeTableList.removeAll(result);
+
+                        String deletedItemDay = timeTableList.get(0).getDayOfWeek();
+                        if(dayExtra != null){
+                            dayExtra = deletedItemDay;
+                            Toast.makeText(TimeTableActivity.this, "Day of deleted " + deletedItemDay, Toast.LENGTH_SHORT).show();
+                        }
+                    }*/
+
 
                     timeTableList.clear();
+
 
                     for (int i = 0; i < result.size(); i++) {
                         if (result.get(i).getDayOfWeek().equals(dayExtra)) {
                             timeTableList.add(result.get(i));
                             timetableAdapter.notifyDataSetChanged();
                         }
-                        if (timeTableList.size() == 0) {
-                            Intent addIntent = new Intent(TimeTableActivity.this, UpdatePeriodActivity.class);
-                            startActivity(addIntent);
-                            finish();
-                        }
-
                     }
+
                     Toast.makeText(TimeTableActivity.this, "Table Loaded", Toast.LENGTH_SHORT).show();
+                }
+
+                if (timeTableList.isEmpty()) {
+                    Intent addIntent = new Intent(TimeTableActivity.this, UpdatePeriodActivity.class);
+                    addIntent.putExtra(TimetableDayAdapter.DAY_KEY, dayExtra);
+                    addIntent.putExtra(TimetableAdapter.UPDATE_KEY, 2);
+                    addIntent.putExtra(UpdateTimeTableActivity.CLASS_CODE, CurrentUserRepo.getOffline().getLevel());
+                    startActivity(addIntent);
+                    finish();
                 }
 
             }
