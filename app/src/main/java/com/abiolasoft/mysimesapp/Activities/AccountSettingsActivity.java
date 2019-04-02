@@ -65,13 +65,15 @@ public class AccountSettingsActivity extends BaseActivity {
         userDetails = CurrentUserRepo.getOffline();
 
         ArrayAdapter<ImeClasses> setClassAdapt = new ArrayAdapter<ImeClasses>(this,
-                android.R.layout.simple_list_item_1,
+                android.R.layout.simple_spinner_item,
                 ImeClasses.values());
+        setClassAdapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         settingClassSpin.setAdapter(setClassAdapt);
 
         ArrayAdapter<ImeExecutives> executivePositionAdapt = new ArrayAdapter<ImeExecutives>(this,
-                android.R.layout.simple_list_item_1,
+                android.R.layout.simple_spinner_item,
                 ImeExecutives.values());
+        executivePositionAdapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         executivePositionSpin.setAdapter(executivePositionAdapt);
 
 
@@ -112,10 +114,11 @@ public class AccountSettingsActivity extends BaseActivity {
 
     @Override
     protected boolean useToolbar() {
+
         if (referer == 0) {
             return false;
         } else {
-            return true;
+            return super.useToolbar();
         }
     }
 

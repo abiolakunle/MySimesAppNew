@@ -118,10 +118,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         getLayoutInflater().inflate(layoutResID, activityContainer, true);
         super.setContentView(fullView);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(0xFFFFFFFF);
         if (useToolbar())
         {
             setSupportActionBar(toolbar);
-            setTitle(this.getClass().getSimpleName());
+            setTitle(this.getClass().getSimpleName().replace("Activity", ""));
             UserSharedPref mPref = new UserSharedPref();
             UserDetails currentUserDetails = CurrentUserRepo.getOffline();
             DrawerUtil drawer = new DrawerUtil();
@@ -159,7 +160,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                         startActivity(setupIntent);
                         finish();
 
-                        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(BaseActivity.this);
+                        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         SharedPreferences.Editor editor = mPrefs.edit();
                         editor.clear();
                         editor.commit();

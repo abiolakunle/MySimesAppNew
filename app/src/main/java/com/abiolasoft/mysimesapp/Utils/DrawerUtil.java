@@ -99,22 +99,21 @@ public class DrawerUtil {
         //if you want to update the items at a later time it is recommended to keep it in a variable
         //PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("MySimesMessenger").withIdentifier(1);
 
-        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("My Forum").withIdentifier(1);
+        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("Home").withIdentifier(1);
 
 
-        ExpandableDrawerItem item3 = new ExpandableDrawerItem().withName("My timetable").withIdentifier(2);
+        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withName("My timetable").withIdentifier(2);
 
-        ExpandableDrawerItem item4 = new ExpandableDrawerItem().withName("My  E-Library").withSubItems(
+        ExpandableDrawerItem item3 = new ExpandableDrawerItem().withName("My  E-Library").withSubItems(
                 new SecondaryDrawerItem().withName("ELibrary").withIdentifier(3),
                 new SecondaryDrawerItem().withName("Upload a File").withIdentifier(4),
                 new SecondaryDrawerItem().withName("Upload Multiple Files").withIdentifier(5)
-
         );
 
-        ExpandableDrawerItem item5 = new ExpandableDrawerItem().withName("Executives").withIdentifier(6);
+        PrimaryDrawerItem item4 = new PrimaryDrawerItem().withName("Executives").withIdentifier(6);
 
 
-        PrimaryDrawerItem item6 = new PrimaryDrawerItem().withName("Logout").withIdentifier(7);
+        //PrimaryDrawerItem item6 = new PrimaryDrawerItem().withName("Logout").withIdentifier(7);
 
 
         Drawer result = new DrawerBuilder()
@@ -124,7 +123,7 @@ public class DrawerUtil {
                 .withAccountHeader(headerResult)
 
                 .addDrawerItems(
-                        item1, item3, item4, item5, item6
+                        item1, item2, item3, item4
 
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -150,6 +149,7 @@ public class DrawerUtil {
 
                         if (drawerItemIntent != null) {
                             activity.startActivity(drawerItemIntent);
+                            activity.finish();
                         }
 
                         return false;

@@ -8,20 +8,19 @@ public class Course {
     private String courseCode;
     private String courseName;
     private int courseUnit;
-    private List<Integer> levels;
+    private List<String> levels;
 
     public Course() {
-        if (levels == null) {
-            levels = new ArrayList<Integer>();
-        }
+        levels = new ArrayList<>();
     }
 
-    public List<Integer> getLevels() {
+    public List<String> getLevels() {
         return levels;
     }
 
-    public void setLevels(List<Integer> levels) {
-        this.levels = levels;
+
+    public void setLevels(int position, String level) {
+        levels.add(position, level);
     }
 
 

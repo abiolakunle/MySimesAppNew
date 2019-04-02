@@ -102,6 +102,7 @@ public class TimeTableActivity extends BaseActivity {
                     addIntent.putExtra(TimetableDayAdapter.DAY_KEY, dayExtra);
                     addIntent.putExtra(TimetableAdapter.UPDATE_KEY, 2);
                     addIntent.putExtra(UpdateTimeTableActivity.CLASS_CODE, CurrentUserRepo.getOffline().getLevel());
+                    Toast.makeText(TimeTableActivity.this, dayExtra + " is empty, update it", Toast.LENGTH_SHORT).show();
                     startActivity(addIntent);
                     finish();
                 }

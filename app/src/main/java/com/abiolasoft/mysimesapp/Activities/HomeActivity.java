@@ -1,5 +1,6 @@
 package com.abiolasoft.mysimesapp.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -13,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.abiolasoft.mysimesapp.Models.HomeMessageAdapter;
+import com.abiolasoft.mysimesapp.Adapters.HomeMessageAdapter;
 import com.abiolasoft.mysimesapp.Models.ImageMessage;
 import com.abiolasoft.mysimesapp.Models.UserDetails;
 import com.abiolasoft.mysimesapp.R;
@@ -39,6 +40,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,13 +63,14 @@ public class HomeActivity extends BaseActivity {
     private Uri imageUri;
     private List<ImageMessage> messagesList;
     private List<String> messageIdList;
-
-
+    private static final String KEY_IS_FIRST_TIME = "com.<com.abiolasoft.mysimesapp.Activities>.first_time";
+    private static final String KEY = "com.<com.abiolasoft.mysimesapp.Activities>";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
 
         sendBtn = findViewById(R.id.home_message_send_btn);
         addImageBtn = findViewById(R.id.home_mesage_add_image_btn);
@@ -83,10 +86,9 @@ public class HomeActivity extends BaseActivity {
         recyclerView.setAdapter(homeMessageAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        loadMessagesFromDb();
-
         messageModel = new ImageMessage();
 
+        loadMessagesFromDb();
 
         addImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,13 +103,21 @@ public class HomeActivity extends BaseActivity {
             }
         });
 
-
-
     }
+
+
+
 
     @Override
     protected void onStart() {
         super.onStart();
+
+        if (isFirstTime()) {
+            Intent firstTimeIntent = new Intent(this, TermsAndConditionsActivity.class);
+            startActivity(firstTimeIntent);
+        }
+
+        getSharedPreferences(KEY, Context.MODE_PRIVATE).edit().putBoolean(KEY_IS_FIRST_TIME, false).commit();
 
         auth = FirebaseAuth.getInstance();
         Intent redirectIntent;
@@ -149,7 +159,9 @@ public class HomeActivity extends BaseActivity {
             if (resultCode == RESULT_OK) {
 
                 imageUri = result.getUri();
+                messageImageView.setVisibility(View.VISIBLE);
                 messageImageView.setImageURI(imageUri);
+
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
 
@@ -171,12 +183,12 @@ public class HomeActivity extends BaseActivity {
             messageModel.setSender_image_url(CurrentUserRepo.getOffline().getImage_thumb());
             messageModel.setMessage_time(String.valueOf(System.currentTimeMillis()));
 
-            if (!(imageUri == null)) {
+            if (imageUri != null) {
 
                 final String randomName = UUID.randomUUID().toString();
                 final StorageReference firebaseStorage = FirebaseStorage.getInstance().getReference();
 
-                firebaseStorage.child(DbPaths.MessageImages.toString()).child(randomName + ".jpg")
+                firebaseStorage.child(DbPaths.MessageImages.toString()).child(randomName + "jpg")
                         .putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -188,7 +200,7 @@ public class HomeActivity extends BaseActivity {
 
                             byte[] thumbData = compressImageForThumb();
                             firebaseStorage.child(DbPaths.MessageImageThumbs.toString())
-                                    .child(randomName + ".jpg").putBytes(thumbData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    .child(randomName + "jpg").putBytes(thumbData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
@@ -199,24 +211,41 @@ public class HomeActivity extends BaseActivity {
                                 }
                             });
 
+                            firebaseFirestore.collection(DbPaths.HomeMessages.toString()).add(messageModel).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentReference> task) {
+
+                                    if (task.isSuccessful()) {
+
+                                        messageImageView.setVisibility(View.GONE);
+
+                                        Toast.makeText(HomeActivity.this, "Post was added", Toast.LENGTH_LONG).show();
+
+                                    }
+
+                                }
+                            });
+
                         }
                     }
                 });
 
-            }
+            } else {
+                firebaseFirestore.collection(DbPaths.HomeMessages.toString()).add(messageModel).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
 
-            firebaseFirestore.collection(DbPaths.HomeMessages.toString()).add(messageModel).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentReference> task) {
+                        if (task.isSuccessful()) {
 
-                    if (task.isSuccessful()) {
+                            Toast.makeText(HomeActivity.this, "Post was added", Toast.LENGTH_LONG).show();
 
-                        Toast.makeText(HomeActivity.this, "Post was added", Toast.LENGTH_LONG).show();
+                        }
 
                     }
+                });
+            }
 
-                }
-            });
+
 
         }
 
@@ -278,7 +307,8 @@ public class HomeActivity extends BaseActivity {
 
     private void loadMessagesFromDb() {
 
-        firebaseFirestore.collection(DbPaths.HomeMessages.toString()).addSnapshotListener(new EventListener<QuerySnapshot>() {
+
+        firebaseFirestore.collection(DbPaths.HomeMessages.toString()).orderBy("message_time").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
                 messagesList.clear();
@@ -286,12 +316,19 @@ public class HomeActivity extends BaseActivity {
                 for (DocumentSnapshot results : documentSnapshots) {
                     ImageMessage message = results.toObject(ImageMessage.class);
                     messageIdList.add(results.getId());
+                    Collections.reverse(messageIdList);
                     messagesList.add(message);
+                    Collections.reverse(messagesList);
 
                     homeMessageAdapter.notifyDataSetChanged();
                 }
+
             }
         });
+    }
+
+    public boolean isFirstTime() {
+        return getSharedPreferences(KEY, Context.MODE_PRIVATE).getBoolean(KEY_IS_FIRST_TIME, true);
     }
 
 }

@@ -8,9 +8,8 @@ public class ImeClass {
     private List<TimeTablePeriod> timeTable;
 
     public ImeClass() {
-        if (timeTable == null) {
-            timeTable = new ArrayList<TimeTablePeriod>();
-        }
+
+        timeTable = new ArrayList<TimeTablePeriod>();
     }
 
     public void addToTimetable(TimeTablePeriod period) {

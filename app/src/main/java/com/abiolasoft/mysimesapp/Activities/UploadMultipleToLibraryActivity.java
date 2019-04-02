@@ -234,7 +234,6 @@ public class UploadMultipleToLibraryActivity extends BaseActivity {
                 courses.clear();
                 for (DocumentSnapshot result : documentSnapshots) {
                     courses.add(new MultiSelectModel(position++, result.toObject(Course.class).getCourseName()));
-                    Toast.makeText(UploadMultipleToLibraryActivity.this, result.toObject(Course.class).getCourseName(), Toast.LENGTH_SHORT).show();
                     libraryMultiUploadAdapter.notifyDataSetChanged();
                 }
                 for (ImeClasses classTag : ImeClasses.values()) {

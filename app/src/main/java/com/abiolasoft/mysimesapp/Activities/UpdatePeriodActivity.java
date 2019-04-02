@@ -171,15 +171,12 @@ public class UpdatePeriodActivity extends BaseActivity {
         final List<String> listOfCourse = new ArrayList<String>();
         courseObjects = new ArrayList<Course>();
         Integer[] hour = new Integer[12];
-        Integer[] min = new Integer[60];
+        Integer[] min = new Integer[]{0, 15, 30, 45};
 
         for (int i = 0; i < hour.length; i++) {
             hour[i] = i + 1;
         }
 
-        for (int i = 0; i < min.length; i++) {
-            min[i] = i;
-        }
 
         final ArrayAdapter<Integer> timeHourAdapt = new ArrayAdapter<Integer>(
                 this, android.R.layout.simple_spinner_item, hour);
@@ -189,7 +186,7 @@ public class UpdatePeriodActivity extends BaseActivity {
 
         final ArrayAdapter<Integer> timeMinAdapt = new ArrayAdapter<Integer>(
                 this, android.R.layout.simple_spinner_item, min);
-        timeHourAdapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        timeMinAdapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         startTimeMinSpin.setAdapter(timeMinAdapt);
         endTimeMinSpin.setAdapter(timeMinAdapt);
 

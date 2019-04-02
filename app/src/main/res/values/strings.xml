@@ -40,26 +40,17 @@
     <string name="uploader">Uploader</string>
     <string name="file_type">File type</string>
     <string name="send">Send</string>
-    <string name="add_image">Add Image</string>
+    <string name="add_image">Add image</string>
+    <string name="agree_continue">Agree and continue</string>
 
 
     <string-array name="colors" translatable="false">
-        <item>#99cc00</item>
         <item>#33b5e5</item>
         <item>#0099cc</item>
         <item>#547bca</item>
-        <item>#aa66cc</item>
-        <item>#9933cc</item>
-        <item>#669900</item>
-        <item>#aeb857</item>
-        <item>#cc0000</item>
-        <item>#df5948</item>
-        <item>#ff4444</item>
-        <item>#ae6b23</item>
-        <item>#ff8800</item>
-        <item>#e5ae4f</item>
-        <item>#ffbb33</item>
+        <item>#8DC3EE</item>
         <item>#cccccc</item>
+        <item>#9E9E9E</item>
         <item>#888888</item>
     </string-array>
 

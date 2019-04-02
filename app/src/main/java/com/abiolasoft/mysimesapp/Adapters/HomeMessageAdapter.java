@@ -1,4 +1,4 @@
-package com.abiolasoft.mysimesapp.Models;
+package com.abiolasoft.mysimesapp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.abiolasoft.mysimesapp.Activities.HomeMessageCommentsActivity;
+import com.abiolasoft.mysimesapp.Models.ImageMessage;
 import com.abiolasoft.mysimesapp.R;
 import com.abiolasoft.mysimesapp.Repositories.CurrentUserRepo;
 import com.abiolasoft.mysimesapp.Utils.DbPaths;
@@ -62,8 +63,8 @@ public class HomeMessageAdapter extends RecyclerView.Adapter<HomeMessageAdapter.
         holder.messageTime.setText(TimeAgo.getTimeAgo(Long.parseLong(messagesList.get(position).getMessage_time()), context));
 
         String messageImageUrl = messagesList.get(position).getImage_url();
-        if (!(messageImageUrl == null)) {
-            Picasso.get().load(messageImageUrl).into(holder.messageImage);
+        if (messageImageUrl != null) {
+            Picasso.get().load(messageImageUrl).placeholder(R.drawable.post_placeholder).into(holder.messageImage);
             holder.messageImage.setVisibility(View.VISIBLE);
         }
 
@@ -86,8 +87,10 @@ public class HomeMessageAdapter extends RecyclerView.Adapter<HomeMessageAdapter.
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         Toast.makeText(context, "Done", Toast.LENGTH_SHORT).show();
+
                     }
                 });
+
             }
 
         });
@@ -100,6 +103,10 @@ public class HomeMessageAdapter extends RecyclerView.Adapter<HomeMessageAdapter.
 
             }
         });
+    }
+
+    private void notifyChange() {
+        this.notifyDataSetChanged();
     }
 
     @Override

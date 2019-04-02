@@ -169,7 +169,7 @@ public class EBookViewerActivity extends BaseActivity {
             for (int j = 0; j < preSelectedTags.size(); j++) {
                 if (allTagListStrings.get(i).equals(preSelectedTags.get(j))) {
                     selectedTagsIds.add(i);
-                    Toast.makeText(this, preSelectedTags.get(j), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, preSelectedTags.get(j), Toast.LENGTH_SHORT).show();
                 }
             }
         }

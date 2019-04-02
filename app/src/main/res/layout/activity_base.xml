@@ -11,13 +11,15 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background_material_dark"
+            android:background="@color/primary_dark"
             />
 
         <FrameLayout
             android:id="@+id/activity_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@drawable/app_background"
+            android:scaleType="centerCrop" />
 
     </LinearLayout>
   <!--  <android.support.design.widget.NavigationView
