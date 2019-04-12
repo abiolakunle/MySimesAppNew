@@ -94,6 +94,19 @@ public class SeedDatabase {
                         "STRENGTH OF MATERIALS",
                         "ADVANCED ALGEBRA",
 
+                        //hnd12
+                        "ENTREPRENEURSHIP SKILL DEVELOPMENT I",
+                        "COMMUNICATION IN ENGLISH III",
+                        "INDUSTRIAL MANAGEMENT",
+                        "INDUSTRIAL HYDRAULICS & PNEUMATICS I",
+                        "ELECTRIC CIRCUIT THEORY II",
+                        "INDUSTRIAL ELECTRONICS II",
+                        "ELECT | ELECT SYSTEMS MAINTENANCE I",
+                        "MAINTENANCE MANAGEMENT II",
+                        "MACHINE DESIGN & CAD",
+                        "FLUID MECHANICS",
+                        "ADVANCED CALCULUS",
+
                         //hnd2
                         "ENTREPRENEURSHIP DEVELOPMENT. II",
                         "RESEARCH METHODS | PROJECT SEMINAR",
@@ -179,6 +192,19 @@ public class SeedDatabase {
                         "MEG317",
                         "MTH311",
 
+                        //hnd12
+                        "EED316",
+                        "GNS302",
+                        "GNS326",
+                        "IME302",
+                        "IME304",
+                        "IME306",
+                        "IME308",
+                        "IME310",
+                        "IME312",
+                        "MEG306",
+                        "MTH312",
+
                         //hnd2
                         "EED413",
                         "IME400",
@@ -214,6 +240,8 @@ public class SeedDatabase {
 
                         //hnd1
                         2, 3, 2, 3, 3, 3, 3, 3, 3,
+                        //hnd12
+                        2, 2, 2, 3, 2, 3, 2, 2, 3, 3, 3,
                         //hnd2
                         2, 2, 3, 3, 2, 3, 2, 3, 2, 2,
                         //hnd22
@@ -232,6 +260,9 @@ public class SeedDatabase {
 
                         //hnd1
                         hnd1_ft, hnd1_ft, hnd1_ft, hnd1_ft, hnd1_ft, hnd1_ft, hnd1_ft, hnd1_ft, hnd1_ft,
+
+                        //hnd12
+                        hnd1_ft, hnd1_ft, hnd1_ft, hnd1_ft, hnd1_ft, hnd1_ft, hnd1_ft, hnd1_ft, hnd1_ft, hnd1_ft, hnd1_ft,
 
                         //hnd2
                         hnd2_ft, hnd2_ft, hnd2_ft, hnd2_ft, hnd2_ft, hnd2_ft, hnd2_ft, hnd2_ft, hnd2_ft, hnd2_ft,

@@ -28,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,8 +48,6 @@ public class EBookViewerActivity extends BaseActivity {
     private List<String> preSelectedTags;
     private ArrayList<Integer> selectedTagsIds;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +62,6 @@ public class EBookViewerActivity extends BaseActivity {
         eBookTagsLv = findViewById(R.id.ebook_viewer_tags_lv);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
-
 
         allTagsList = new ArrayList<MultiSelectModel>();
         allTagListStrings = new ArrayList<String>();
@@ -106,14 +104,20 @@ public class EBookViewerActivity extends BaseActivity {
                 eBook = documentSnapshot.toObject(EBook.class);
                 eBookTitle.setText(eBook.getBook_title());
                 eBookUploader.setText("Uploaded by: " + eBook.getUploaded_by());
-                eBookSize.setText("File size: " + eBook.getFile_size() + "KB");
+                DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
+                eBookSize.setText("File size: " + decimalFormat.format(eBook.getFile_size()) + "KB");
                 eBookType.setText("File type: " + eBook.getFile_type());
 
                 preSelectedTags.clear();
-                for (String tag : eBook.getBook_tags()) {
-                    preSelectedTags.add(tag);
-                    tagsAdapter.notifyDataSetChanged();
+
+                List<String> tags = eBook.getBook_tags();
+                if (!(tags == null)) {
+                    for (String tag : tags) {
+                        preSelectedTags.add(tag);
+                        tagsAdapter.notifyDataSetChanged();
+                    }
                 }
+
             }
         });
     }
@@ -122,7 +126,7 @@ public class EBookViewerActivity extends BaseActivity {
 
         //MultiSelectModel
         final MultiSelectDialog multiSelectDialog = new MultiSelectDialog()
-                .title("Add tags to book") //setting title for dialog
+                .title("Add tags to " + eBook.getBook_title()) //setting title for dialog
                 .titleSize(25)
                 .positiveText("Done")
                 .negativeText("Cancel")
@@ -136,10 +140,14 @@ public class EBookViewerActivity extends BaseActivity {
 
                         eBookModifyTags.setText(selectedNames.size() + ((selectedNames.size() > 1) ? " tags added, tap to modify" : " tag added, tap to modify"));
 
-
+                        List<String> tags = eBook.getBook_tags();
+                        if (tags == null) {
+                            eBook.setBook_tags(new ArrayList<String>());
+                        }
                         eBook.getBook_tags().clear();
                         for (String tag : selectedNames) {
                             eBook.addTag(tag);
+
                         }
 
                         firebaseFirestore.collection(DbPaths.ELibrary.toString()).document(eBookId).set(eBook).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -175,7 +183,6 @@ public class EBookViewerActivity extends BaseActivity {
         }
     }
 
-
     private void loadTags() {
         CollectionReference dbRef = firebaseFirestore.getInstance().collection(DbPaths.Courses.toString());
         dbRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -201,6 +208,5 @@ public class EBookViewerActivity extends BaseActivity {
         });
 
     }
-
 
 }

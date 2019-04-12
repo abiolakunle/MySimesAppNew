@@ -19,12 +19,8 @@ public class EBook {
     private List<String> book_custom_tags;
 
     public EBook() {
-        if (book_tags == null) {
-            book_tags = new ArrayList<>();
-        }
-        if (book_custom_tags == null) {
-            book_custom_tags = new ArrayList<>();
-        }
+        book_tags = new ArrayList<>();
+        book_custom_tags = new ArrayList<>();
     }
 
     public void addCustomTag(String tag) {

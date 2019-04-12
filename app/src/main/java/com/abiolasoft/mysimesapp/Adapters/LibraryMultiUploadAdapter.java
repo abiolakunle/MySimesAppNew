@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,12 +31,15 @@ public class LibraryMultiUploadAdapter extends RecyclerView.Adapter<LibraryMulti
     private List<Double> progress;
     private ArrayList<MultiSelectModel> courses;
     private FragmentManager fragmentManager;
+    private List<MultiSelectDialog> tagDialogs;
 
-    public LibraryMultiUploadAdapter(FragmentManager fragmentManager, List<String> fileNames, List<Double> progress, ArrayList<MultiSelectModel> courses) {
+
+    public LibraryMultiUploadAdapter(FragmentManager fragmentManager, List<String> fileNames, List<Double> progress, ArrayList<MultiSelectModel> courses, List<MultiSelectDialog> tagDialogs) {
         this.fragmentManager = fragmentManager;
         this.fileNames = fileNames;
         this.progress = progress;
         this.courses = courses;
+        this.tagDialogs = tagDialogs;
     }
 
     public static Map<Integer, ArrayList> getEBookTagList() {
@@ -47,7 +51,11 @@ public class LibraryMultiUploadAdapter extends RecyclerView.Adapter<LibraryMulti
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         View view = LayoutInflater.from(context).inflate(R.layout.upload_multi_library_single_item, parent, false);
-        return new ViewHolder(view);
+
+        ViewHolder viewHolder = new ViewHolder(view);
+        //viewHolder.setIsRecyclable(false);
+
+        return viewHolder;
     }
 
     @Override
@@ -58,25 +66,12 @@ public class LibraryMultiUploadAdapter extends RecyclerView.Adapter<LibraryMulti
         holder.progressBar.setProgress(progress.get(position).intValue());
         holder.progTextView.setText(progress.get(position).intValue() + "%");
 
-
-
-
         /*final ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_multiple_choice, courses);
         //holder.eBookTagsLv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         holder.eBookTagsLv.setAdapter(adapter);
         //SparseBooleanArray pos = holder.eBookTagsLv.getCheckedItemPositions();
         adapter.notifyDataSetChanged();*/
-
-        //MultiSelectModel
-        final MultiSelectDialog multiSelectDialog = new MultiSelectDialog()
-                .title("Add tags to book") //setting title for dialog
-                .titleSize(25)
-                .positiveText("Done")
-                .negativeText("Cancel")
-                .setMinSelectionLimit(1) //you can set minimum checkbox selection limit (Optional)
-                .setMaxSelectionLimit(20) //you can set maximum checkbox selection limit (Optional)
-                .preSelectIDsList(new ArrayList<Integer>()) //List of ids that you need to be selected
-                .multiSelectList(courses) // the multi select model list with ids and name
+        tagDialogs.get(position)
                 .onSubmit(new MultiSelectDialog.SubmitCallbackListener() {
                     @Override
                     public void onSelected(ArrayList<Integer> selectedIds, ArrayList<String> selectedNames, String dataString) {
@@ -88,14 +83,12 @@ public class LibraryMultiUploadAdapter extends RecyclerView.Adapter<LibraryMulti
                     public void onCancel() {
                         //Log.d(TAG,"Dialog cancelled");
                     }
-
-
                 });
 
-        holder.addBookTagTv.setOnClickListener(new View.OnClickListener() {
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                multiSelectDialog.show(fragmentManager, "multiSelectDialog" + position);
+                tagDialogs.get(position).show(fragmentManager, "multiSelectDialog" + fileNames.get(position));
             }
         });
 
@@ -107,11 +100,22 @@ public class LibraryMultiUploadAdapter extends RecyclerView.Adapter<LibraryMulti
         return fileNames.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private LetterImageView letterImageView;
         private TextView bookTitle, progTextView, addBookTagTv;
         private ProgressBar progressBar;
         private Spinner eBookTagsLv;
+        private CardView cardView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -122,6 +126,9 @@ public class LibraryMultiUploadAdapter extends RecyclerView.Adapter<LibraryMulti
             progTextView = itemView.findViewById(R.id.lib_multi_prog_tv);
             eBookTagsLv = itemView.findViewById(R.id.lib_multi_tags_spin);
             addBookTagTv = itemView.findViewById(R.id.lib_multi_add_tag_tv);
+            cardView = itemView.findViewById(R.id.multi_upload_cv);
         }
+
+
     }
 }

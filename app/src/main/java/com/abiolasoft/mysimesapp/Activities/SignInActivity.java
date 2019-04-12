@@ -3,11 +3,14 @@ package com.abiolasoft.mysimesapp.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.abiolasoft.mysimesapp.Models.UserDetails;
 import com.abiolasoft.mysimesapp.R;
 import com.abiolasoft.mysimesapp.Repositories.CurrentUserRepo;
+import com.abiolasoft.mysimesapp.Utils.DbPaths;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -25,9 +28,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
 
@@ -37,6 +43,10 @@ public class SignInActivity extends BaseActivity {
     private CallbackManager callbackManager;
     private LoginButton loginButton;
     public static String NEW_LOGIN = "newLogin";
+    private EditText emailEt, passwordEt;
+    private Button registerBtn, signInBtn;
+    private FirebaseAuth auth;
+    private FirebaseFirestore firebaseFirestore;
 
     private GoogleSignInAccount googleAccount;
 
@@ -44,11 +54,36 @@ public class SignInActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        registerBtn = findViewById(R.id.register_btn);
+        signInBtn = findViewById(R.id.login_btn);
+        emailEt = findViewById(R.id.sign_in_email_et);
+        passwordEt = findViewById(R.id.sign_in_password_et);
+
+        auth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+
         facebookLoginProp();
         googleSignIn();
 
-    }
+        registerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent registerIntent = new Intent(SignInActivity.this, SignUpActivity.class);
+                startActivity(registerIntent);
+            }
+        });
 
+        signInBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pDialog.setTitleText("Signing you in");
+                pDialog.show();
+                signInUser();
+            }
+        });
+
+    }
     @Override
     protected void onStart(){
         super.onStart();
@@ -75,7 +110,6 @@ public class SignInActivity extends BaseActivity {
             //for facebook login
             callbackManager.onActivityResult(requestCode, resultCode, data);
         }
-
     }
 
     @Override
@@ -107,6 +141,45 @@ public class SignInActivity extends BaseActivity {
         });
     }
 
+
+    private void signInUser() {
+        String email = emailEt.getText().toString();
+        String password = passwordEt.getText().toString();
+        if (password.isEmpty()) {
+            Toast.makeText(this, "Please enter your password", Toast.LENGTH_SHORT).show();
+        } else if (email.isEmpty()) {
+            Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show();
+        } else {
+            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+
+                        firebaseFirestore.collection(DbPaths.Users.toString()).document(task.getResult()
+                                .getUser().getUid()).get()
+                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            UserDetails currentUser = task.getResult().toObject(UserDetails.class);
+                                            CurrentUserRepo.updateCurrentUser(currentUser);
+                                            updateUI();
+                                            pDialog.dismiss();
+                                        }
+                                    }
+                                });
+
+                    } else {
+                        eDialog.setContentText(task.getException().getMessage());
+                        eDialog.show();
+                        pDialog.dismiss();
+                    }
+                }
+            });
+        }
+
+    }
+
     private void handleFacebookAccessToken(AccessToken token){
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
 
@@ -130,9 +203,7 @@ public class SignInActivity extends BaseActivity {
                         userDetailsModel.setImage_url(userInfo.getPhotoUrl().toString()); //?type=large
                         userDetailsModel.setPhone(userInfo.getPhoneNumber());
                     }
-
                     CurrentUserRepo.updateCurrentUser(userDetailsModel);
-
                     updateUI();
                 }
 
@@ -167,7 +238,6 @@ public class SignInActivity extends BaseActivity {
                 startActivityForResult(signInIntent, 60);
             }
         });
-
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {

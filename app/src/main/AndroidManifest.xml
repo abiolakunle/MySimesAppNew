@@ -13,11 +13,11 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/launcher_logo"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".Activities.PrivacyPolicyActivity"></activity>
-        <activity android:name=".Activities.TermsAndConditionsActivity">
-
-        </activity>
+        android:theme="@style/AppTheme"
+        tools:replace="android:icon">
+        <activity android:name=".Activities.SignUpActivity"></activity>
+        <activity android:name=".Activities.PrivacyPolicyActivity" />
+        <activity android:name=".Activities.TermsAndConditionsActivity"></activity>
         <activity android:name=".Activities.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

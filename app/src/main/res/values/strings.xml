@@ -42,6 +42,17 @@
     <string name="send">Send</string>
     <string name="add_image">Add image</string>
     <string name="agree_continue">Agree and continue</string>
+    <string name="sign_up">Sign up</string>
+    <string name="display_name">Display name</string>
+    <string name="email">Email</string>
+    <string name="phone_number">Phone number</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="change_profile_image">Change profile image</string>
+    <string name="register">Register</string>
+    <string name="new_user_register">New user? Register now</string>
+    <string name="sign_in">Sign in</string>
+    <string name="already_registered">Already registered? sign in now.</string>
 
 
     <string-array name="colors" translatable="false">

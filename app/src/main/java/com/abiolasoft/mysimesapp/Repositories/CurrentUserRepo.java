@@ -3,11 +3,9 @@ package com.abiolasoft.mysimesapp.Repositories;
 import com.abiolasoft.mysimesapp.Models.UserDetails;
 import com.abiolasoft.mysimesapp.Utils.UserSharedPref;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 public class CurrentUserRepo {
     private static final String USER_PREF_KEY = "currentUser";
-    private static UserRepository userRepository = new UserRepository(getApplicationContext());
+    private static UserRepository userRepository = new UserRepository();
     private static UserSharedPref userSharedPref = new UserSharedPref();
 
     public static void updateCurrentUser(UserDetails userDetails) {

@@ -7,6 +7,8 @@ public enum DbPaths {
     Classes,
     MessageImages,
     MessageImageThumbs,
-    HomeMessages
+    HomeMessages,
+    ProfilePicture,
+    ProfilePictureThumb
 }
 

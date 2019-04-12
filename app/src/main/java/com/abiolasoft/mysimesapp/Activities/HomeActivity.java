@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
@@ -20,6 +19,7 @@ import com.abiolasoft.mysimesapp.Models.UserDetails;
 import com.abiolasoft.mysimesapp.R;
 import com.abiolasoft.mysimesapp.Repositories.CurrentUserRepo;
 import com.abiolasoft.mysimesapp.Utils.DbPaths;
+import com.abiolasoft.mysimesapp.Utils.ImageCompressor;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -36,9 +36,6 @@ import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -47,7 +44,8 @@ import java.util.UUID;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import id.zelory.compressor.Compressor;
+
+//import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class HomeActivity extends BaseActivity {
 
@@ -104,9 +102,6 @@ public class HomeActivity extends BaseActivity {
         });
 
     }
-
-
-
 
     @Override
     protected void onStart() {
@@ -198,7 +193,7 @@ public class HomeActivity extends BaseActivity {
                             String downloadUrl = task.getResult().getDownloadUrl().toString();
                             messageModel.setImage_url(downloadUrl);
 
-                            byte[] thumbData = compressImageForThumb();
+                            byte[] thumbData = ImageCompressor.compressImageForThumb(HomeActivity.this, imageUri);
                             firebaseStorage.child(DbPaths.MessageImageThumbs.toString())
                                     .child(randomName + "jpg").putBytes(thumbData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
@@ -251,27 +246,7 @@ public class HomeActivity extends BaseActivity {
 
     }
 
-    private byte[] compressImageForThumb() {
 
-        Bitmap compressedImageFile = null;
-        File newImageFile = new File(imageUri.getPath());
-        try {
-            compressedImageFile = new Compressor(HomeActivity.this)
-                    .setMaxHeight(200)
-                    .setMaxWidth(200)
-                    .setQuality(5)
-                    .compressToBitmap(newImageFile);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        ByteArrayOutputStream boas = new ByteArrayOutputStream();
-        compressedImageFile.compress(Bitmap.CompressFormat.JPEG, 100, boas);
-
-        return boas.toByteArray();
-
-    }
 
     private String getFileName(Uri uri) {
         String result = null;
@@ -307,24 +282,34 @@ public class HomeActivity extends BaseActivity {
 
     private void loadMessagesFromDb() {
 
+        /*SweetAlertDialog alertDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        alertDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        alertDialog.setTitleText("Loading");
+        alertDialog.setCancelable(false);
+        alertDialog.show();*/
 
-        firebaseFirestore.collection(DbPaths.HomeMessages.toString()).orderBy("message_time").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        firebaseFirestore.collection(DbPaths.HomeMessages.toString()).orderBy("message_time")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                messagesList.clear();
-                messageIdList.clear();
-                for (DocumentSnapshot results : documentSnapshots) {
-                    ImageMessage message = results.toObject(ImageMessage.class);
-                    messageIdList.add(results.getId());
-                    Collections.reverse(messageIdList);
-                    messagesList.add(message);
-                    Collections.reverse(messagesList);
 
-                    homeMessageAdapter.notifyDataSetChanged();
+                if (!documentSnapshots.isEmpty()) {
+                    messagesList.clear();
+                    messageIdList.clear();
+                    for (DocumentSnapshot results : documentSnapshots) {
+
+                        ImageMessage message = results.toObject(ImageMessage.class);
+                        messageIdList.add(results.getId());
+                        Collections.reverse(messageIdList);
+                        messagesList.add(message);
+                        Collections.reverse(messagesList);
+
+                        homeMessageAdapter.notifyDataSetChanged();
+                    }
                 }
-
             }
         });
+        //alertDialog.dismiss();
     }
 
     public boolean isFirstTime() {

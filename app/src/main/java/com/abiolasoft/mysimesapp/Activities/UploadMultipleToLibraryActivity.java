@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.abdeveloper.library.MultiSelectDialog;
 import com.abdeveloper.library.MultiSelectModel;
 import com.abiolasoft.mysimesapp.Adapters.LibraryMultiUploadAdapter;
 import com.abiolasoft.mysimesapp.Models.Course;
@@ -55,6 +56,7 @@ public class UploadMultipleToLibraryActivity extends BaseActivity {
     private List<Double> progressList;
     private List<Integer> progVisibility;
     private ArrayList<MultiSelectModel> courses;
+    private List<MultiSelectDialog> tagDialogs;
     private FragmentManager fragmentManager;
 
     private LibraryMultiUploadAdapter libraryMultiUploadAdapter;
@@ -74,11 +76,12 @@ public class UploadMultipleToLibraryActivity extends BaseActivity {
         progressList = new ArrayList<>();
         progVisibility = new ArrayList<>();
         courses = new ArrayList<MultiSelectModel>();
+        tagDialogs = new ArrayList<>();
 
         loadTags();
 
         fragmentManager = getSupportFragmentManager();
-        libraryMultiUploadAdapter = new LibraryMultiUploadAdapter(fragmentManager, fileNameList, progressList, courses);
+        libraryMultiUploadAdapter = new LibraryMultiUploadAdapter(fragmentManager, fileNameList, progressList, courses, tagDialogs);
         recyclerView.setAdapter(libraryMultiUploadAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -98,7 +101,8 @@ public class UploadMultipleToLibraryActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //upload Button
-                if (LibraryMultiUploadAdapter.getEBookTagList().size() < fileNameList.size()) {
+                if (//LibraryMultiUploadAdapter.getEBookTagList().size() < fileNameList.size()
+                        false) {
                     Toast.makeText(UploadMultipleToLibraryActivity.this, "Please tag books to help organise the library", Toast.LENGTH_SHORT).show();
                 } else {
                     uploadToDb();
@@ -137,6 +141,22 @@ public class UploadMultipleToLibraryActivity extends BaseActivity {
                     fileDoneList.add("uploading");
                     progressList.add(i, 0.0);
                     progVisibility.add(i, View.INVISIBLE);
+
+
+                    //MultiSelectModel
+                    final MultiSelectDialog multiSelectDialog = new MultiSelectDialog()
+                            .title("Add tags to " + fileName) //setting title for dialog
+                            .titleSize(25)
+                            .positiveText("Done")
+                            .negativeText("Cancel")
+                            .setMinSelectionLimit(0) //you can set minimum checkbox selection limit (Optional)
+                            .setMaxSelectionLimit(20) //you can set maximum checkbox selection limit (Optional)
+                            .preSelectIDsList(new ArrayList<Integer>()) //List of ids that you need to be selected
+                            .multiSelectList(courses); // the multi select model list with ids and name
+
+                    tagDialogs.add(i, multiSelectDialog);
+
+
                     libraryMultiUploadAdapter.notifyDataSetChanged();
 
                 }
@@ -181,6 +201,7 @@ public class UploadMultipleToLibraryActivity extends BaseActivity {
         final Map<Integer, ArrayList> eBookTags = LibraryMultiUploadAdapter.getEBookTagList();
         final UserDetails userDetail = CurrentUserRepo.getOffline();
 
+        final double totalUploadSize = 100 * fileNameList.size();
         for (int i = 0; i < fileNameList.size(); i++) {
             final int position = i;
             storageRef.child(fileNameDatabase.get(i)).putFile(fileUri.get(i)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -213,11 +234,21 @@ public class UploadMultipleToLibraryActivity extends BaseActivity {
                     double progress = (100 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
                     progressList.set(position, progress);
                     libraryMultiUploadAdapter.notifyDataSetChanged();
+
                 }
             }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    updateUI();
+
+                    double totalProgress = 0;
+
+                    for (double prog : progressList) {
+                        totalProgress += prog;
+                    }
+                    if (totalProgress == totalUploadSize) {
+                        updateUI();
+                    }
+
                 }
             });
 
@@ -243,6 +274,7 @@ public class UploadMultipleToLibraryActivity extends BaseActivity {
         });
 
     }
+
 
     private void updateUI() {
         Intent libraryIntent = new Intent(this, ELibraryActivity.class);

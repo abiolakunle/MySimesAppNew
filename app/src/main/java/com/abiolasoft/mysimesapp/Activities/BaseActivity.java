@@ -36,6 +36,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -45,6 +46,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected FirebaseUser user;
     protected GoogleSignInClient mGoogleSignInClient;
     protected Toolbar toolbar;
+    protected SweetAlertDialog pDialog;
+    protected SweetAlertDialog eDialog;
 
 
     @Override
@@ -52,6 +55,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         SeedDatabase.populateCourses(this);
+
+        initMsgDialogs();
 
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
@@ -74,6 +79,23 @@ public abstract class BaseActivity extends AppCompatActivity {
         };
 */
 
+    }
+
+    private void initMsgDialogs() {
+        eDialog = new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE);
+        eDialog.getProgressHelper().setBarColor(R.color.primary_dark);
+        eDialog.setCancelable(false);
+        eDialog.setTitleText("Error");
+        eDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                sweetAlertDialog.dismiss();
+            }
+        });
+
+        pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(R.color.primary_dark);
+        pDialog.setCancelable(false);
     }
 
     @Override
@@ -119,6 +141,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.setContentView(fullView);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(0xFFFFFFFF);
+
+
         if (useToolbar())
         {
             setSupportActionBar(toolbar);

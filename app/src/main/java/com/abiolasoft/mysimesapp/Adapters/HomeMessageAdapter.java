@@ -44,7 +44,11 @@ public class HomeMessageAdapter extends RecyclerView.Adapter<HomeMessageAdapter.
         context = parent.getContext();
         View view = LayoutInflater.from(context).inflate(R.layout.home_single_item, parent, false);
 
-        return new ViewHolder(view);
+
+        ViewHolder viewHolder = new ViewHolder(view);
+        viewHolder.setIsRecyclable(false);
+
+        return viewHolder;
     }
 
     @Override
@@ -107,6 +111,16 @@ public class HomeMessageAdapter extends RecyclerView.Adapter<HomeMessageAdapter.
 
     private void notifyChange() {
         this.notifyDataSetChanged();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     @Override
